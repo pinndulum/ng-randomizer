@@ -1,0 +1,14 @@
+<div class="header">
+    <h1 mat-dialog-title>{{ title }}</h1>
+</div>
+<div mat-dialog-content *ngIf="message">
+    <p class="dialog-message" [innerHtml]="message | safe: 'html'"></p>
+</div>
+<div mat-dialog-content *ngIf="iframe">
+    <iframe [src]="iframe.src" [title]="iframe.title"></iframe>
+</div>
+<div mat-dialog-actions>
+    <ng-container *ngFor="let button of buttons">
+        <button mat-button (click)="onPress(button)">{{button.title}}</button>
+    </ng-container>
+</div>

@@ -1,0 +1,72 @@
+@use '@angular/material'as mat;
+@include mat.core();
+@import './variables.scss';
+
+@include mat.all-component-themes($light-theme);
+
+.app-root {
+  display: grid;
+}
+
+.rand-dark-theme {
+  @include mat.all-component-themes($dark-theme);
+
+  gridster {
+    .deleteItem {
+      background: transparent !important;
+    }
+  }
+
+  gridster-item {
+    background: #ddd;
+  }
+
+  .tasksContainer {
+    h2 {
+      background: #fff !important;
+    }
+  }
+
+  .content-container {
+    color: #000;
+  }
+
+  .main-container {
+    background-color: #888;
+  }
+}
+
+.rand-blue-theme {
+  @include mat.all-component-themes($blue-theme);
+
+  gridster {
+    background-color: #102e4b;
+
+    .deleteItem {
+      background: transparent !important;
+    }
+  }
+
+  gridster-item {
+    background: #ddd;
+  }
+
+  .tasksContainer {
+    h2 {
+      background: #fff !important;
+    }
+  }
+
+  .content-container {
+    color: #000;
+  }
+
+  .main-container {
+    background-color: #102e4b;
+
+    a,
+    h1 {
+      color: #ddd;
+    }
+  }
+}

@@ -1,1 +1,229 @@
-/* You can add global styles to this file, and also import other style files */
+@import "../src/themes.scss";
+// @import '~material-design-icons/iconfont/material-icons.css';
+
+/* Global Styles */
+* {
+    font-family: "Roboto", Arial, sans-serif;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+router-outlet+* {
+    padding: 0 16px;
+}
+
+/* Text */
+
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h1,
+h2 {
+    font-weight: lighter;
+}
+
+p {
+    font-size: 14px;
+}
+
+/* Hyperlink */
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* Input */
+
+input {
+    font-size: 14px;
+    border-radius: 2px;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #bdbdbd;
+}
+
+label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.banner {
+    display: block;
+    height: 14px;
+    text-align: center;
+    font-size: 80%;
+    font-weight: bolder;
+    background-color: #b22222;
+    color: black;
+}
+
+/* Button */
+.button,
+button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 2px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    justify-content: space-around;
+}
+
+.menu-button {
+    width: 16.666%;
+    border: solid;
+    border-radius: 10px;
+    background-color: #eaefd3;
+    color: black;
+    border-color: white;
+}
+
+.button:hover,
+button:hover {
+    opacity: 0.8;
+}
+
+.button:disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: auto;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #0b132b;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-color: white;
+    border-style: solid;
+    font-size: 24px;
+    border-radius: 5px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #0b132b;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #0b132b;
+}
+
+/* Mat-card */
+
+.mat-card {
+    background-color: lightgrey;
+    margin: 5px;
+    column-count: auto;
+}
+
+.mat-card-title {
+    color: black;
+}
+
+.mat-card-content {
+    color: black;
+}
+
+/* Header Buttons */
+
+.gridbutton {
+    width: 100%;
+    border-radius: 5px;
+    border-color: white;
+    border: 1px solid;
+    font-size: 12px;
+    height: 30;
+}
+
+.mat-progress-bar-fill::after {
+    background-color: orange !important;
+}
+
+.tasksProgressRed .mat-progress-bar-fill::after {
+    background-color: red !important;
+}
+
+.tasksProgressGreen .mat-progress-bar-fill::after {
+    background-color: green !important;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.disabled {
+
+    .mat-button,
+    .mat-menu-item {
+        opacity: 0.5;
+        cursor: auto;
+        pointer-events: none;
+    }
+}
+
+//* this removes ability to select a mat tooltip  *//
+.mat-tooltip-panel {
+    pointer-events: none;
+}
