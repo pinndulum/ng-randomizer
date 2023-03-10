@@ -7,7 +7,11 @@ import { DialogTemplateComponent } from './components/controls/dialog-template/d
 import { FooterComponent } from './components/layouts/footer/footer.component';
 import { HeaderComponent } from './components/layouts/header/header.component';
 import { SidebarComponent } from './components/layouts/sidebar/sidebar.component';
+import { BuzzWordsComponent } from './components/pages/buzz-words/buzz-words.component';
+import { ChangeLogHistoryComponent } from './components/pages/change-log-history/change-log-history.component';
+import { FlipACoinComponent } from './components/pages/flip-a-coin/flip-a-coin.component';
 import { HomeComponent } from './components/pages/home/home.component';
+import { PseudoIdentityComponent } from './components/pages/pseudo-identity/pseudo-identity.component';
 import { NgVarDirective } from './directives/ng-var.directive';
 import { MaterialModule } from './modules/material.module';
 import * as pipes from './pipes';
@@ -15,20 +19,25 @@ import * as pipes from './pipes';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    DialogTemplateComponent,
     FooterComponent,
     HeaderComponent,
     SidebarComponent,
-    DialogTemplateComponent,
+    BuzzWordsComponent,
+    ChangeLogHistoryComponent,
+    FlipACoinComponent,
+    HomeComponent,
+    PseudoIdentityComponent,
     NgVarDirective,
-    pipes.SafePipe,
     pipes.PrecisionPipe,
+    pipes.ReplacePipe,
+    pipes.SafePipe,
     pipes.TimePipe
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     MaterialModule
   ],
   providers: [],

@@ -1,0 +1,19 @@
+<div class="pagetitle">
+    <h1>Flip A Coin</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item">Random</li>
+            <li class="breadcrumb-item active">Flip A Coin</li>
+        </ol>
+    </nav>
+</div>
+<section class="section coin-flip">
+    <ng-container *ngIf="flip$ | async; let flip;">
+        <div>{{flip}}</div>
+    </ng-container>
+    <button class="btn btn-primary" type="button" [disabled]="flipping" (click)="flip()">
+        <span *ngIf="flipping" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{ flipping ? 'Flipping...': 'Flip Again'}}
+    </button>
+</section>

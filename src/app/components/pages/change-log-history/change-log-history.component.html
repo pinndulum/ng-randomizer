@@ -1,0 +1,19 @@
+<div class="pagetitle">
+    <h1>Change Log History</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item">Random</li>
+            <li class="breadcrumb-item active">Change Log History</li>
+        </ol>
+    </nav>
+</div>
+<section class="section change-log-history">
+    <ng-container *ngIf="change_history$ | async; let history;">
+        <ng-container *ngFor="let item of history;">
+            <div>
+                {{item.Id}}
+            </div>
+        </ng-container>
+    </ng-container>
+</section>
