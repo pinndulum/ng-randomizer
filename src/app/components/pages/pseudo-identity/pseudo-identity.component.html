@@ -262,8 +262,7 @@
                                         Card #:
                                     </label>
                                     <div class="col-sm-10">
-                                        <input type="text" disabled class="form-control"
-                                            [value]="ident.cc.card | replace:'NaN':''">
+                                        <input type="text" disabled class="form-control" [value]="ident.cc.card">
                                     </div>
                                     <button class="btn btn-primary sm_btn" type="button" [disabled]="loading"
                                         (click)="recycle(ident, 'cc.card')">

@@ -65,13 +65,17 @@ export class MockService {
     credit_card: () => {
       const today = dates.current();
       const ccdgt = this.random.int({ min: 3, max: 6 }, true);
-      const ccfmt = ccdgt === 3 ? 'xxx-xxxxxx-xxxxx' : 'xxx-xxxx-xxxx-xxxx';
-      return this.complex.object({
-        card: `luhn:${ccfmt.replace('-', '').length}:${ccdgt}${ccfmt}`,
+      const luhnlen = ccdgt === 3 ? 13 : 14;
+      const cc = this.complex.object({
+        card: `luhn:${luhnlen}:${ccdgt}${'x'.repeat(luhnlen)}`,
         month: 'number:1:12:true',
         year: `number:${today.year + 1}:${today.year + 11}`,
         cvv: `numstring:${ccdgt === 3 ? 4 : 3}`
       });
+      const ccfmt: [RegExp, string] = ccdgt === 3 ? [/^(\d{4})(\d{6})(\d{5})/, '$1-$2-$3']
+        : [/^(\d{4})(\d{4})(\d{4})(\d{4})/, '$1-$2-$3-$4'];
+      cc.card = cc.card.replace(ccfmt[0], ccfmt[1]);
+      return cc;
     },
     identity: (gender?: Gender) => {
       gender = gender ?? this.realistic.names.gender();
