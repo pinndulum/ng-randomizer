@@ -52,9 +52,14 @@
                         <tfoot *ngIf="results.length">
                             <ng-container *ngVar="sum(); let results">
                                 <tr>
-                                    <td></td><td></td>
+                                    <td></td><td>Sum</td>
                                     <td>heads: {{results.heads}} / tails: {{results.tails}}</td>
                                     <td>{{results.spins}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td><td>Avg</td>
+                                    <td>heads: {{avg('heads') | number:'0.0-1'}}% / tails: {{avg('tails')| number:'0.0-1'}}%</td>
+                                    <td>{{avg('spins') | number:'0.0-1'}}</td>
                                 </tr>
                             </ng-container>
                         </tfoot>

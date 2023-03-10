@@ -68,4 +68,16 @@ export class FlipACoinComponent implements AfterViewInit {
     const spins = this.results.reduce((sum, cur) => sum + cur.spins, 0);
     return { ...sides, spins };
   };
+
+  avg = (side: side | 'spins') => {
+    const [sum, count] = [this.sum(), this.results.length];
+    switch (side) {
+      case 'heads':
+        return (sum.heads / count) * 100;
+      case 'tails':
+        return (sum.tails / count) * 100;
+      case 'spins':
+        return sum.spins / count;
+    }
+  };
 }
