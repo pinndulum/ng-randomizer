@@ -16,6 +16,7 @@ export class FlipACoinComponent implements AfterViewInit {
 
   public flipping = false;
   public readonly flip$: Observable<side>;
+  public readonly results: { side: side; spins: number; }[] = [];
 
   private range!: { min: number; max: number; inclusive: boolean; };
   private readonly spins_sub: Subject<number> = new Subject();
@@ -37,6 +38,11 @@ export class FlipACoinComponent implements AfterViewInit {
           this.flipping = spin !== spins;
           side = coin_sides.find(x => x !== side) ?? side;
           return side;
+        }),
+        tap(side => {
+          if (!this.flipping) {
+            this.results.push({ side, spins });
+          }
         })
       ))
     );
@@ -51,5 +57,15 @@ export class FlipACoinComponent implements AfterViewInit {
   flip = () => {
     const { min, max, inclusive } = this.range;
     this.spins_sub.next(this.mock.random.int({ min, max }, inclusive));
+  };
+
+  sum = () => {
+    const sides = this.results.reduce((sum, cur) => {
+      sum.heads += cur.side === 'heads' ? 1 : 0;
+      sum.tails += cur.side === 'tails' ? 1 : 0;
+      return sum;
+    }, { heads: 0, tails: 0 });
+    const spins = this.results.reduce((sum, cur) => sum + cur.spins, 0);
+    return { ...sides, spins };
   };
 }

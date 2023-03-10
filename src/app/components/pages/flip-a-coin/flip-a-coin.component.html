@@ -9,11 +9,52 @@
     </nav>
 </div>
 <section class="section coin-flip">
-    <ng-container *ngIf="flip$ | async; let flip;">
-        <div>{{flip}}</div>
-    </ng-container>
-    <button class="btn btn-primary" type="button" [disabled]="flipping" (click)="flip()">
-        <span *ngIf="flipping" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        {{ flipping ? 'Flipping...': 'Flip Again'}}
-    </button>
+    <div class="row">
+        <div class="col-xl-2">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <ng-container *ngIf="flip$ | async; let flip;">
+                        <img src="assets/img/Quarter Heads.png" alt="heads" style="width: 100px; height: 100px;"
+                            *ngIf="flip === 'heads'">
+                        <img src="assets/img/Quarter Tails.png" alt="tails" style="width: 100px; height: 100px;"
+                            *ngIf="flip === 'tails'">
+                    </ng-container>
+                    <div class="mt-1">
+                        <button class="btn btn-primary" type="button" [disabled]="flipping" (click)="flip()">
+                            <span *ngIf="flipping" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            {{ flipping ? 'Flipping...': 'Flip Again'}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-10">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <h5 class="card-title" style="font-size: 16px;">Results Panel</h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <th scope="col">Flip</th>
+                            <td scope="col">Side</td>
+                            <td scope="col">Spins</td>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let result of results; let ndx = index;">
+                                <th scope="row">{{ndx + 1}}</th>
+                                <td>{{result.side}}</td>
+                                <td>{{result.spins}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot *ngIf="results.length">
+                            <tr *ngVar="sum(); let results">
+                                <td>Sum</td>
+                                <td>heads: {{results.heads}} tails: {{results.tails}}</td>
+                                <td>{{results.spins}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
