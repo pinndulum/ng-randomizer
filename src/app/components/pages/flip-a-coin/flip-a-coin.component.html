@@ -35,22 +35,28 @@
                     <table class="table table-hover">
                         <thead>
                             <th scope="col">Flip</th>
-                            <td scope="col">Side</td>
-                            <td scope="col">Spins</td>
+                            <th scope="col">Time</th>
+                            <th scope="col">Side</th>
+                            <th scope="col">Spins</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let result of results; let ndx = index;">
                                 <th scope="row">{{ndx + 1}}</th>
+                                <td [matTooltip]="result.dt.toString()">
+                                    {{result.dt | date:'mediumTime'}}
+                                </td>
                                 <td>{{result.side}}</td>
                                 <td>{{result.spins}}</td>
                             </tr>
                         </tbody>
                         <tfoot *ngIf="results.length">
-                            <tr *ngVar="sum(); let results">
-                                <td>Sum</td>
-                                <td>heads: {{results.heads}} tails: {{results.tails}}</td>
-                                <td>{{results.spins}}</td>
-                            </tr>
+                            <ng-container *ngVar="sum(); let results">
+                                <tr>
+                                    <td></td><td></td>
+                                    <td>heads: {{results.heads}} / tails: {{results.tails}}</td>
+                                    <td>{{results.spins}}</td>
+                                </tr>
+                            </ng-container>
                         </tfoot>
                     </table>
                 </div>

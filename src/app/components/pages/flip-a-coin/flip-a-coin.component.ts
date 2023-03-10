@@ -16,7 +16,7 @@ export class FlipACoinComponent implements AfterViewInit {
 
   public flipping = false;
   public readonly flip$: Observable<side>;
-  public readonly results: { side: side; spins: number; }[] = [];
+  public readonly results: { dt: Date; side: side; spins: number; }[] = [];
 
   private range!: { min: number; max: number; inclusive: boolean; };
   private readonly spins_sub: Subject<number> = new Subject();
@@ -41,7 +41,7 @@ export class FlipACoinComponent implements AfterViewInit {
         }),
         tap(side => {
           if (!this.flipping) {
-            this.results.push({ side, spins });
+            this.results.push({ dt: new Date(), side, spins });
           }
         })
       ))
