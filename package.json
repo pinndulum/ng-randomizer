@@ -1,7 +1,6 @@
 {
   "name": "ng-randomizer",
   "version": "0.0.0",
-  "homepage": "https://pinndulum.github.io/ng-randomizer",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint ./src --fix",
-    "preghpages": "ng build --base-href 'https://pinndulum.github.io/ng-randomizer/'",
+    "preghpages": "ng build --base-href ./",
     "ghpages": "npx angular-cli-ghpages --dir=dist/ng-randomizer"
   },
   "private": true,
