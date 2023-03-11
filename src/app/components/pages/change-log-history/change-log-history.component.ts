@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { mergeMap, skip, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
 import { MockService } from 'src/app/services/mock.service';
 
@@ -12,7 +13,7 @@ interface HistoryItem {
     Email: string;
   };
   Data: {
-    Id: number;
+    Id: string;
     ChangeType: 'Insert' | 'Update' | 'Delete';
     RecordId: number;
     TableName: 'Claimant' | 'Processor' | 'Advisor' | 'Supervisor' | 'Client' | 'Vendor';
@@ -21,7 +22,6 @@ interface HistoryItem {
     CurrValue?: ndx_sig_of<unknown>;
   }[];
 }
-
 @Component({
   selector: 'app-change-log-history',
   templateUrl: './change-log-history.component.html',
@@ -29,19 +29,52 @@ interface HistoryItem {
 })
 export class ChangeLogHistoryComponent implements AfterViewInit {
 
-  public change_history$ ?: Observable<HistoryItem[]>;
+  public readonly change_history$: Observable<HistoryItem[]>;
+
+  private mock_logs$!: Observable<HistoryItem[]>;
+  private readonly page_sub: Subject<number> = new Subject();
+
+  public readonly pg = {
+    perpg: 10,
+    current: 0,
+    pages: [0],
+    pgcount: (count: number) => {
+      const perpg = this.pg.perpg;
+      return Math.floor(count / perpg) + (count % perpg > 0 ? 1 : 0);
+    },
+    prev: () => {
+      this.pg.current--;
+      this.page_sub.next(this.pg.current);
+    },
+    goto: (pg: number) => {
+      this.pg.current = pg;
+      this.page_sub.next(this.pg.current);
+    },
+    next: () => {
+      this.pg.current++;
+      this.page_sub.next(this.pg.current);
+    }
+  };
 
   constructor(private mock: MockService) {
+    this.change_history$ = this.page_sub.pipe(
+      switchMap(x => this.mock_logs$.pipe(
+        mergeMap(x => x),
+        skip(x * this.pg.perpg),
+        take(this.pg.perpg),
+        toArray()
+      ))
+    );
   }
 
   ngAfterViewInit(): void {
-    this.change_history$ = of(
+    this.mock_logs$ = of(
       this.mock.complex.list<HistoryItem>({
         Id: 'guid',
         TimeStamp: 'date:now:now',
         User: { Id: 'number:100:501', Name: 'string:8', Email: 'email' },
         Data: [{
-          Id: 'number:1000:2001',
+          Id: 'guid',
           ChangeType: 'choose:Insert,Update,Delete',
           RecordId: 'number:10:41',
           TableName: 'choose:Claimant,Processor,Advisor,Supervisor,Client,Vendor',
@@ -49,7 +82,7 @@ export class ChangeLogHistoryComponent implements AfterViewInit {
         }]
       }, { min: 11, max: 75 }, { Data: { max: 4 } }).map(entry => {
         const getData = () => this.mock.complex.object({
-          Id: 'guid',
+          Id: 'number:1000:2001',
           version: 'ver',
           Name: '',
           Value: '',
@@ -83,7 +116,25 @@ export class ChangeLogHistoryComponent implements AfterViewInit {
         }
         return entry;
       })
+    ).pipe(
+      tap(items => {
+        this.pg.pages.splice(0);
+        const pgcount = this.pg.pgcount(items.length);
+        this.pg.pages.push(...Array(pgcount).keys());
+      })
     );
+    this.page_sub.next(0);
   }
 
+  change_type_icon = (type: 'Insert' | 'Update' | 'Delete') => {
+    let icon = 'bi-clipboard';
+    switch (type) {
+      case 'Insert':
+        return `${icon}-plus`;
+      case 'Update':
+        return `${icon}-check`;
+      case 'Delete':
+        return `${icon}-minus`;
+    }
+  };
 }

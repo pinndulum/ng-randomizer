@@ -9,11 +9,120 @@
     </nav>
 </div>
 <section class="section change-log-history">
-    <ng-container *ngIf="change_history$ | async; let history;">
-        <ng-container *ngFor="let item of history;">
-            <div>
-                {{item.Id}}
+    <div class="row">
+        <div class="col-xl-10">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <h5 class="card-title" style="font-size: 16px;">Change Logs</h5>
+                    <ng-container *ngIf="change_history$ | async; let history;">
+                        <table class="table table-hover">
+                            <thead>
+                                <th scope="col">Id</th>
+                                <th scope="col">TimeStamp</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Data</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of history;">
+                                    <th scope="row">{{item.Id}}</th>
+                                    <td [matTooltip]="item.TimeStamp.toString()">
+                                        {{item.TimeStamp | date:'short'}}
+                                    </td>
+                                    <td [matTooltip]="item.User.Email">
+                                        {{item.User.Name}}
+                                    </td>
+                                    <td>
+                                        <div class="pb-1" *ngFor="let data of item.Data">
+                                            <button class="btn btn-primary sm_btn me-2" type="button" data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#details_' + data.Id" [matTooltip]="data.Id">
+                                                <i class="bi bi-binoculars"></i>
+                                            </button>
+                                            <i class="bi " [ngClass]="change_type_icon(data.ChangeType)"></i>
+                                            {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
+                                            <ng-template [ngTemplateOutlet]="detail_modal" [ngTemplateOutletContext]="{data: data}">
+                                            </ng-template>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="pagination" *ngIf="pg.pages.length">
+                            <li class="page-item " [ngClass]="pg.current === 0 ? 'disabled' : ''">
+                                <a class="page-link" (click)="pg.prev()">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                            <ng-container *ngFor="let page of pg.pages;">
+                                <li class="page-item " [ngClass]="page === pg.current ? 'active' : ''">
+                                    <a class="page-link" (click)="pg.goto(page)">
+                                        {{page + 1}}
+                                    </a>
+                                </li>
+                            </ng-container>
+                            <li class="page-item "[ngClass]="pg.pages.length - 1 > pg.current ? '' : 'disabled'" >
+                                <a class="page-link" (click)="pg.next()">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
             </div>
-        </ng-container>
-    </ng-container>
+        </div>
+    </div>
 </section>
+
+<ng-template #detail_modal let-data="data">
+    <div class="modal fade" [id]="'details_' + data.Id" tabindex="-1">
+        <div class="modal-dialog" style="max-width: 900px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-size: 16px;">
+                        Change Log Details-&gt; {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-10 mb-4" *ngIf="data.CurrValue">
+                        <h5 class="modal-title mb-0" style="font-size: 16px; font-weight: bold;">
+                            Current Value
+                        </h5>
+                        <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.CurrValue}">
+                        </ng-template>
+                    </div>
+                    <div class="col-md-10 mb-4" *ngIf="data.PrevValue">
+                        <h5 class="modal-title mb-0" style="font-size: 16px; font-weight: bold;">
+                            Previous Value
+                        </h5>
+                        <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.PrevValue}">
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #detail_table let-value="value">
+    <table style="width: 100%">
+        <thead>
+            <th>Version</th>
+            <th>Created By</th>
+            <th>Created On</th>
+            <th>Modified By</th>
+            <th>Modified On</th>
+        </thead>
+        <tbody>
+            <td>{{value.version}}</td>
+            <td>{{value.CreatedBy}}</td>
+            <td>{{value.CreatedOn | date: 'short'}}</td>
+            <td>{{value.ModifiedBy}}</td>
+            <td>{{value.ModifiedOn | date: 'short'}}</td>
+        </tbody>
+    </table>
+</ng-template>
