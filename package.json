@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint ./src --fix",
-    "preghpages": "ng build --base-href ./",
+    "preghpages": "ng build --base-href /ng-randomizer/",
     "ghpages": "npx angular-cli-ghpages --dir=dist/ng-randomizer"
   },
   "private": true,
