@@ -10,10 +10,26 @@
 </div>
 <section class="section buzz-words">
     <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <ng-container *ngIf="buzz_words$ | async; let buzz_words;">
+                        <h1>{{buzz_words}}</h1>
+                    </ng-container>
+                    <div class="pt-2">
+                        <button class="btn btn-primary" type="button" (click)="load()">
+                            New Buzz Words
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xl-5">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Buzzword Bank</h5>
+                    <h5 class="card-title">Buzzword Banks</h5>
                     <table class="table table-striped">
                         <thead>
                             <th scope="col">#</th>
@@ -34,18 +50,6 @@
             </div>
         </div>
         <div class="col-xl-7">
-            <div class="card">
-                <div class="card-body pt-3">
-                    <ng-container *ngIf="buzz_words$ | async; let buzz_words;">
-                        {{buzz_words}}
-                    </ng-container>
-                    <div class="pt-2">
-                        <button class="btn btn-primary" type="button" (click)="load()">
-                            New Buzz Words
-                        </button>
-                    </div>
-                </div>
-            </div>
             <div class="card">
                 <div class="card-body pt-3">
                     <p>
@@ -73,7 +77,7 @@
                         knowledgeable authority.
                     </p>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orig-img">
-                        Buzzword Generator Image
+                        Original Buzzword Generator
                     </button>
                     <div class="modal fade" id="orig-img" tabindex="-1">
                         <div class="modal-dialog" style="max-width: 600px">

@@ -8,4 +8,54 @@
     </nav>
 </div>
 <section class="section home">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-header pb-0 mb-2">
+                        <h3 class="mb-0">Randomizer UI</h3>
+                        <h5 class="mb-0">The @joxnathan/mock-randomizer library demo</h5>
+                    </div>
+                    <p>
+                        This Randomizer UI is a demonstration of implementing the <a href="https://www.npmjs.com/package/@joxnathan/mock-randomizer" target="_blank">@joxnathan/mock-randomizer</a>
+                        library available on npmjs.com. when loaded as a dev dependency @joxnathan/mock-randomizer can replace data sources
+                        in node project unit tests. The scenarios and utilizations implemented here are only for demonstration and are meant
+                        to be a references and examples of the kinds of random data that can be generated and how to implement their use.
+                    </p>
+                    <p>
+                        Random numbers, dates, booleans, strings of text, etc. can be returned. These in turn can be placed within objects and arrays.
+                        Arrays can be randomly instantiated with a certain number of elements between lower and upper limits. Then in turn, the items
+                        in the array can be randomly generated. Objects can also be filled with randomly generated properties. 
+                    </p>
+                    <p>
+                        The result of flipping a coin is deterministic if you can know the side the coin started on and how many times it spins
+                        before coming to rest. In the "Flip A Coin" page both these considerations are randomized with brief pauses to allow
+                        for anticipation of the user. The results are then added to a table and should show a nearly 50/50 outcome after sufficiently
+                        large number of flips have occurred.
+                    </p>
+                    <p>
+                        Another aspect to the mock-randomizer is providing realistic data rather than simply random values. A name could not only
+                        represented by a random count of random characters, i.e. "iEwEVhrKyBYc". How about something more realistic like
+                        "Rachel" or "Joseph". Embedded wordbanks are used to pick names for people, places, things, titles, etc. There is even a
+                        "typeset" option that returns one of several "lorem ipsum" strings of various lengths. Or use your own wordbank, enum, or
+                        list to choose from. Look to the "Buzzwords" page to see an example.
+                    </p>
+                    <p>
+                        Provisions have been made for formatting random numericals into other realistic looking values. For instance, the "Pseudo
+                        Identity" page shows the creation of a single object with various properties such as name, address, phone number, credit card,
+                        etc. Realistic results should not only be words that can be understood by a human reader, but should be able to pass other
+                        potential checks, verifications, validations, and scrutiny as well. When creating a U.S. phone number, zip code, and time zone;
+                        an optional "State" parameter indicates where the realistic data should appear to come from. Credit card numbers can be created
+                        that pass LUHN digit checksum validation.
+                    </p>
+                    <p>
+                        The "Change Log History" page shows the use of randomly filling a number of objects in an array. Notice how the number of pages
+                        changes each time the page is reloaded. Each object contains an array that is also randomly filled. This example shows how to to
+                        use the mock-randomizer DSL (domain specific language) to fill each object within the array. Empty "Prev" and "Curr" objects are
+                        created during array initialization. Properties for these objects are then filled in later based on values returned earlier.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

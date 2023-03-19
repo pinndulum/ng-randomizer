@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ClipboardModule } from '@angular/cdk/clipboard'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +38,7 @@ import * as pipes from './pipes';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ClipboardModule,
     AppRoutingModule,
     MaterialModule
   ],

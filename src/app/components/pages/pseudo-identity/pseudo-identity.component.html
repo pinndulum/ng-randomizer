@@ -53,11 +53,20 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="button" [disabled]="loading" (click)="load()">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
-                        aria-hidden="true"></span>
-                    {{ loading ? 'Loading...': 'New Identity'}}
-                </button>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-primary" type="button" [disabled]="loading" (click)="load()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
+                            {{ loading ? 'Loading...': 'New Identity'}}
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" type="button" [disabled]="loading" [cdkCopyToClipboard]="ident | json">
+                            Copy to clipboard
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-8">
                 <div class="card">
