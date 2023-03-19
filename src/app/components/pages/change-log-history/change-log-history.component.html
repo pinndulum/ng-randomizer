@@ -46,25 +46,34 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <ul class="pagination" *ngIf="pg.pages.length">
-                            <li class="page-item " [ngClass]="pg.current === 0 ? 'disabled' : ''">
-                                <a class="page-link" (click)="pg.prev()">
-                                    <i class="bi bi-chevron-left"></i>
-                                </a>
-                            </li>
-                            <ng-container *ngFor="let page of pg.pages;">
-                                <li class="page-item " [ngClass]="page === pg.current ? 'active' : ''">
-                                    <a class="page-link" (click)="pg.goto(page)">
-                                        {{page + 1}}
-                                    </a>
-                                </li>
-                            </ng-container>
-                            <li class="page-item "[ngClass]="pg.pages.length - 1 > pg.current ? '' : 'disabled'" >
-                                <a class="page-link" (click)="pg.next()">
-                                    <i class="bi bi-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="pagination" *ngIf="pg.pages.length">
+                                    <li class="page-item " [ngClass]="pg.current === 0 ? 'disabled' : ''">
+                                        <a class="page-link" (click)="pg.prev()">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    <ng-container *ngFor="let page of pg.pages;">
+                                        <li class="page-item " [ngClass]="page === pg.current ? 'active' : ''">
+                                            <a class="page-link" (click)="pg.goto(page)">
+                                                {{page + 1}}
+                                            </a>
+                                        </li>
+                                    </ng-container>
+                                    <li class="page-item "[ngClass]="pg.pages.length - 1 > pg.current ? '' : 'disabled'" >
+                                        <a class="page-link" (click)="pg.next()">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary" type="button" [cdkCopyToClipboard]="history | json">
+                                    Copy to clipboard
+                                </button>
+                            </div>
+                        </div>
                     </ng-container>
                 </div>
             </div>
