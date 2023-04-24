@@ -1,0 +1,20 @@
+<p>
+    In honor of Pi or &pi; day, here is our favorite mathematical real transcendental (and thus irrational) constant
+    that describes the ratio of a circle's circumference to its diameter. And because it wouldn't be much fun to truncate
+    this infinitely long number to a simple 10 or 20 digits, I have provided a {{superlative()}} {{precision | number:'1.0':'en-US'}}-point precision suitable
+    for your next meticulously high accuracy circular project. If you'd like to calculate digits of Pi for yourself, it's
+    very easy. Simply solve for:<br/>
+    <code class="center">
+        2 * &#40;1 + 1/3 * &#40;1 + 2/5 * &#40;1 + 3/7 * &#40;1 + 4/9 * &#40;1 + 5/11 * &#40;&mldr;
+    </code>
+    <span class="center">in perpetuity, or whenever you give up!</span>
+</p>
+<p>
+    Oh, and by the way, I like my pie cut round!
+</p>
+
+<ng-container *ngIf="progress | async; let prg;">
+    <div class="pi-wrap">
+        {{ prg.content.str }}
+    </div>
+</ng-container>

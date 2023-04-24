@@ -4,6 +4,8 @@ import { ChangeLogHistoryComponent } from '../components/pages/change-log-histor
 import { FlipACoinComponent } from '../components/pages/flip-a-coin/flip-a-coin.component';
 import { HomeComponent } from '../components/pages/home/home.component';
 import { PseudoIdentityComponent } from '../components/pages/pseudo-identity/pseudo-identity.component';
+import { TzClockListComponent } from '../components/controls/tz-clock-list/tz-clock-list.component';
+import { PiComponent } from '../components/pages/pi/pi.component';
 
 export const routes: Routes = [{
     path: 'random/buzz-words',
@@ -23,6 +25,16 @@ export const routes: Routes = [{
 }, {
     path: 'random/change-log-history',
     component: ChangeLogHistoryComponent,
+    canActivate: [],
+    data: {}
+}, {
+    path: 'not-so-random/pi',
+    component: PiComponent,
+    canActivate: [],
+    data: {}
+}, {
+    path: 'not-so-random/world-clock',
+    component: TzClockListComponent,
     canActivate: [],
     data: {}
 }, {
