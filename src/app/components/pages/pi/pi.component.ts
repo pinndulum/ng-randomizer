@@ -34,5 +34,5 @@ export class PiComponent implements OnInit, AfterViewInit {
     }
 
     superlative = () =>
-        this.precision > 10000 ? 'staggering' : 'modest';
+        this.precision > 5000 ? 'staggering' : 'modest';
 }
