@@ -63,14 +63,14 @@ export class MockService {
       return `${area}-${grp}-${serial}`;
     },
     credit_card: () => {
-      const today = dates.current();
+      const year = dates.current.year();
       const ccdgt = this.random.int({ min: 3, max: 6 }, true);
       const ccfmt = ccdgt === 3 ? 'xxx-xxxxxx-xxxx' : 'xxx-xxxx-xxxx-xxx';
       const luhnlen = ccfmt.replace('-', '').length;
       return this.complex.object({
         card: `luhn:${luhnlen}:${ccdgt}${ccfmt}`,
         month: 'number:1:12:true',
-        year: `number:${today.year + 1}:${today.year + 11}`,
+        year: `number:${year + 1}:${year + 11}`,
         cvv: `numstring:${ccdgt === 3 ? 4 : 3}`
       });
     },

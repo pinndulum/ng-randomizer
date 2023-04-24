@@ -7,7 +7,7 @@ import dates from 'src/app/utils/dates';
     styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-    public readonly year = dates.current().year;
+    public readonly year = dates.current.year();
 
     scrollTop () {
         window.scroll({

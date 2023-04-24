@@ -1,50 +1,112 @@
-export const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
+export const months = {
+    names: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ],
+    abrvs: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'July',
+        'Aug',
+        'Sept',
+        'Oct',
+        'Nov',
+        'Dec'
+    ]
+};
 
-export const month_abbrvs = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'June',
-    'July',
-    'Aug',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dec'
-];
+export const dow = {
+    names: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
+    ],
+    abrvs: [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ],
+    shorts: [
+        'U',
+        'M',
+        'T',
+        'W',
+        'R',
+        'F',
+        'S'
+    ]
+};
 
 export const min = () => new Date(-8640000000000000);
 export const max = () => new Date(8640000000000000);
 export const now = () => new Date(Date.now());
 export const today = () => new Date(now().setHours(0, 0, 0, 0));
-export const current = () => {
-    const t = today();
-    return {
-        day: t.getDate(),
-        month: {
-            ndx: t.getMonth(),
-            name: months[t.getMonth()],
-            abrev: month_abbrvs[t.getMonth()]
-        },
-        year: t.getFullYear()
-    };
+export const current = {
+    year: () => today().getFullYear(),
+    month: {
+        ndx: () => today().getMonth(),
+        num: () => today().getMonth() + 1,
+        name: () => months.names[today().getMonth()],
+        abrv: () => months.abrvs[today().getMonth()]
+    },
+    day: {
+        num: () => today().getDate(),
+        dow: {
+            name: () => dow.names[today().getDay()],
+            abrv: () => dow.abrvs[today().getDay()],
+            short: () => dow.shorts[today().getDay()]
+        }
+    },
+    week: () => week(today()),
+    date: () => {
+        const [year, month, day] = date_parts(today());
+        return { year, month, day };
+    },
+    time: () => {
+        const [hour, minute, second, ms] = time_parts(now());
+        return { hour, minute, second, ms };
+    },
+    datetime: () => {
+        const [year, month, day, hour, minute, second, ms] = datetime_parts(now());
+        return { year, month, day, hour, minute, second, ms };
+    }
+};
+export const lastday_of = (year: number, month: string | number) => {
+    let ndx = Number(month);
+    if (typeof month === 'string') {
+        ndx = monthIndex(month);
+    }
+    if (isNaN(ndx) || ndx < 0 || ndx > 11) {
+        return undefined;
+    }
+    return new Date(year, ndx + 1, 0).getDate();
 };
 export const date_parts = (dt?: string | number | Date): [number, number, number] => {
+    if (typeof dt === 'string') {
+        dt = normalize(dt);
+    }
     const date = (isDate(dt) ? new Date(dt ?? 0) : undefined) as Date;
     return [
         date?.getFullYear(),
@@ -103,7 +165,7 @@ export const isDate = (date: number | string | Date | undefined): boolean => {
         return false;
     }
     if (typeof date === 'string') {
-        date = date.replace(/-/g, '/');
+        date = normalize(date);
     }
     return isValid(date);
 };
@@ -121,11 +183,18 @@ export const diffDays = (a: Date, b: Date): number => {
     return Math.ceil(diffTime(a, b) / dailyMS);
 };
 
+export const normalize = (str: string) => {
+    if (/\d{4}-\d{1,2}-\d{1,2}T/g.test(str)) {
+        return str;
+    }
+    return (str ?? '').replace(/-/g, '/');
+};
+
 export const asYYYYMMDD = (date: Date, sep?: string) => {
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = `${d.getMonth() + 1}`.padStart(2, '0');
-    const day = `${d.getDate()}`.padStart(2, '0');
+    const month = (d.getMonth() + 1).padZero(2);
+    const day = d.getDate().padZero(2);
     return [year, month, day].join(sep || '-');
 };
 
@@ -140,19 +209,26 @@ export const week = (date: Date, firstday?: number): number => {
 };
 
 export const monthIndex = (name: string) => {
-    const idx = [...months, ...month_abbrvs]
+    const idx = [...months.names, ...months.abrvs]
         .findIndex(x => x.toLowerCase() === name.toLowerCase());
     return idx < 0 ? idx : idx % 12;
 };
 
 export default {
     months,
-    month_abbrvs,
+    dow,
     min,
     max,
     now,
     today,
     current,
+    lastday_of,
+    date_parts,
+    date_parts_equal,
+    time_parts,
+    time_parts_equal,
+    datetime_parts,
+    datetime_parts_equal,
     addHours,
     addMinutes,
     addSeconds,
@@ -164,6 +240,7 @@ export default {
     isDate,
     diffTime,
     diffDays,
+    normalize,
     asYYYYMMDD,
     week,
     monthIndex

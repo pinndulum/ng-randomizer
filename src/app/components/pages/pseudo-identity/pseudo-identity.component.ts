@@ -100,9 +100,9 @@ export class PseudoIdentityComponent implements AfterViewInit {
         ident.cc = this.mock.realistic.credit_card();
         break;
       case 'cc.exp':
-        const today = dates.current();
+        const year = dates.current.year();
         ident.cc.month = this.mock.random.int({min: 1, max: 12}, true);
-        ident.cc.year = this.mock.random.int({ min: today.year + 1, max: today.year + 11 });
+        ident.cc.year = this.mock.random.int({ min: year + 1, max: year + 11 });
         break;
       case 'cc.cvv':
         const ccdgt = ident.cc.card[0];
