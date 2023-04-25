@@ -1,0 +1,50 @@
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item">Random</li>
+            <li class="breadcrumb-item">Object</li>
+            <li class="breadcrumb-item active">Mock DSL</li>
+        </ol>
+    </nav>
+    <h1>Custom Mock Object</h1>
+</div>
+<section class="section obj-mock-dsl">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <h5 class="card-title" style="font-size: 16px;">
+                        Mock DSL Object
+                    </h5>
+                    <json-editor #editor [data]="editobj.data" [options]="editobj.opts">
+                    </json-editor>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <h5 class="card-title" style="font-size: 16px;">
+                        Mock Result
+                    </h5>
+                    <div class="row pb-3">
+                        <div class="col">
+                            <button class="btn btn-primary" type="button" (click)="mockdata()">
+                                New Result
+                            </button>
+                        </div>
+                        <div class="col" *ngIf="editobj.mock">
+                            <button class="btn btn-primary" type="button" [cdkCopyToClipboard]="editobj.mock | json">
+                                Copy to clipboard
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="editobj.mock">
+                        <textarea rows="30">{{editobj.mock | json}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

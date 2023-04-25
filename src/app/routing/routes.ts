@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
+import { TzClockListComponent } from '../components/controls/tz-clock-list/tz-clock-list.component';
 import { BuzzWordsComponent } from '../components/pages/buzz-words/buzz-words.component';
 import { ChangeLogHistoryComponent } from '../components/pages/change-log-history/change-log-history.component';
 import { FlipACoinComponent } from '../components/pages/flip-a-coin/flip-a-coin.component';
 import { HomeComponent } from '../components/pages/home/home.component';
-import { PseudoIdentityComponent } from '../components/pages/pseudo-identity/pseudo-identity.component';
-import { TzClockListComponent } from '../components/controls/tz-clock-list/tz-clock-list.component';
+import { MockObjectComponent } from '../components/pages/mock-object/mock-object.component';
 import { PiComponent } from '../components/pages/pi/pi.component';
+import { PseudoIdentityComponent } from '../components/pages/pseudo-identity/pseudo-identity.component';
 
 export const routes: Routes = [{
     path: 'random/buzz-words',
@@ -25,6 +26,11 @@ export const routes: Routes = [{
 }, {
     path: 'random/change-log-history',
     component: ChangeLogHistoryComponent,
+    canActivate: [],
+    data: {}
+}, {
+    path: 'random/object/mock-dsl',
+    component: MockObjectComponent,
     canActivate: [],
     data: {}
 }, {
