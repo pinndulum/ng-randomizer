@@ -1,8 +1,7 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, withLatestFrom } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
 
 @Component({
@@ -14,56 +13,71 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
 
   public readonly word_lists = insults;
   public readonly insults$: Observable<string>;
-  private readonly word_sub: Subject<any> = new Subject();
+
+  private readonly word_sub: Subject<string> = new Subject();
   
   constructor(
     private loc: Location,
-    private mock: MockService,
-    private route: ActivatedRoute
+    private mock: MockService
   ) {
-    this.insults$ = this.word_sub.pipe();
+    this.insults$ = this.word_sub.pipe(
+      delay(0)
+    );
   }
 
   ngAfterViewInit(): void {
-    this.route.params.pipe(
-      withLatestFrom(this.route.queryParams),
-      tap(([parms, query]) => {
-        const [x, y, z] = [
-          query['x'], query['y'], query['z']
-        ];
-        const words = [
-          insults[0][+x], insults[1][+y], insults[2][+z]
-        ].filter(x => !!x);
-        if (words.length === 3) {
-          this.word_sub.next(words.join(' '));
-        } else {
-          this.load();
-        }
-      })
-    ).subscribe();
+    const query = new URLSearchParams(location.search);
+    const [x, y, z] = [
+      Number(query.get('x') ?? -1),
+      Number(query.get('y') ?? -1),
+      Number(query.get('z') ?? -1)
+    ];
+    this.load(x, y, z);
   }
 
-  load = () => {
-    const words = [
-      this.mock.realistic.from(insults[0]),
-      this.mock.realistic.from(insults[1]),
-      this.mock.realistic.from(insults[2])
-    ];
+  load = (x?: number, y?: number, z?: number) => {
+    const words: string[] = [];
+    [x, y, z].forEach((n, i) => {
+      let word = insults[i][Number(n)];
+      if (!word) {
+        word = this.mock.realistic.from(insults[i]);
+      }
+      words.push(word);
+    });
+
     this.word_sub.next(words.join(' '));
-    
     const params = new URLSearchParams(location.search);
-    const [x, y, z] = words.map((x, i) =>
-      insults[i].indexOf(x).toString()
-    );
-    params.set('x', x);
-    params.set('y', y);
-    params.set('z', z);
+    ['x', 'y', 'z'].forEach((n, i) => {
+      params.set(n, insults[i].indexOf(words[i]).toString());
+    });
     const search = params.toString();
     if (search !== location.search) {
       const state = this.loc.getState();
       this.loc.replaceState('random/shakespeare-insults', search, state);
     }
   };
+
+  sayit = async (text?: string, voice?: number) => {
+    if (!text) {
+      return;
+    }
+
+    const synth = speechSynthesis;
+    const utter = SpeechSynthesisUtterance;
+    let voices = synth.getVoices();
+    if (!voices.length) {    
+      await new Promise(resolve =>
+        synth.onvoiceschanged = resolve
+      );
+      voices = synth.getVoices();
+    }
+    const speech = new utter(text);
+    speech.voice = voices[voice ?? 2];
+    if (synth.speaking) {
+      synth.cancel();
+    }
+    synth.speak(speech);
+  }
 }
 
 const insults: [string[], string[], string[]] = [[
