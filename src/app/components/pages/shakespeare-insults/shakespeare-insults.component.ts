@@ -1,5 +1,8 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Component } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subject, withLatestFrom } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
 
 @Component({
@@ -13,12 +16,31 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
   public readonly insults$: Observable<string>;
   private readonly word_sub: Subject<any> = new Subject();
   
-  constructor(private mock: MockService) {
+  constructor(
+    private loc: Location,
+    private mock: MockService,
+    private route: ActivatedRoute
+  ) {
     this.insults$ = this.word_sub.pipe();
   }
 
   ngAfterViewInit(): void {
-    this.load();
+    this.route.params.pipe(
+      withLatestFrom(this.route.queryParams),
+      tap(([parms, query]) => {
+        const [x, y, z] = [
+          query['x'], query['y'], query['z']
+        ];
+        const words = [
+          insults[0][+x], insults[1][+y], insults[2][+z]
+        ].filter(x => !!x);
+        if (words.length === 3) {
+          this.word_sub.next(words.join(' '));
+        } else {
+          this.load();
+        }
+      })
+    ).subscribe();
   }
 
   load = () => {
@@ -28,6 +50,19 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
       this.mock.realistic.from(insults[2])
     ];
     this.word_sub.next(words.join(' '));
+    
+    const params = new URLSearchParams(location.search);
+    const [x, y, z] = words.map((x, i) =>
+      insults[i].indexOf(x).toString()
+    );
+    params.set('x', x);
+    params.set('y', y);
+    params.set('z', z);
+    const search = params.toString();
+    if (search !== location.search) {
+      const state = this.loc.getState();
+      this.loc.replaceState('random/shakespeare-insults', search, state);
+    }
   };
 }
 
