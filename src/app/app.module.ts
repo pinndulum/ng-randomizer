@@ -18,10 +18,10 @@ import { HomeComponent } from './components/pages/home/home.component';
 import { MockObjectComponent } from './components/pages/mock-object/mock-object.component';
 import { PiComponent } from './components/pages/pi/pi.component';
 import { PseudoIdentityComponent } from './components/pages/pseudo-identity/pseudo-identity.component';
+import { ShakespeareInsultsComponent } from './components/pages/shakespeare-insults/shakespeare-insults.component';
 import { NgVarDirective } from './directives/ng-var.directive';
 import { MaterialModule } from './modules/material.module';
 import * as pipes from './pipes';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +38,7 @@ import * as pipes from './pipes';
     MockObjectComponent,
     PiComponent,
     PseudoIdentityComponent,
+    ShakespeareInsultsComponent,
     NgVarDirective,
     pipes.PrecisionPipe,
     pipes.ReplacePipe,

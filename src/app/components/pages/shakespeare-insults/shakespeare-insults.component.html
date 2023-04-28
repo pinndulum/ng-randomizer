@@ -3,22 +3,22 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
             <li class="breadcrumb-item">Random</li>
-            <li class="breadcrumb-item active">Buzzword Generator</li>
+            <li class="breadcrumb-item active">Shakespeare Insult Kit</li>
         </ol>
     </nav>
-    <h1>Buzzword Generator</h1>
+    <h1>Shakespeare Insult Kit</h1>
 </div>
-<section class="section buzz-words">
+<section class="section shakespeare-insults">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-body pt-3">
-                    <ng-container *ngIf="buzz_words$ | async; let buzz_words;">
-                        <h1>{{buzz_words}}</h1>
+                    <ng-container *ngIf="insults$ | async; let insults;">
+                        <h1>Thou {{insults}}</h1>
                     </ng-container>
                     <div class="pt-2">
                         <button class="btn btn-primary" type="button" (click)="load()">
-                            New Buzz Words
+                            New Insult
                         </button>
                     </div>
                 </div>
@@ -29,17 +29,15 @@
         <div class="col-xl-5">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Buzzword Banks</div>
+                    <div class="card-title">Insult Banks</div>
                     <table class="table table-striped">
                         <thead>
-                            <th scope="col">#</th>
                             <th scope="col">Column 1</th>
                             <th scope="col">Column 2</th>
                             <th scope="col">Column 3</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let word of word_lists[0]; let ndx = index;">
-                                <th scope="row">{{ndx}}</th>
                                 <td>{{word}}</td>
                                 <td>{{word_lists[1][ndx]}}</td>
                                 <td>{{word_lists[2][ndx]}}</td>
@@ -53,42 +51,25 @@
             <div class="card">
                 <div class="card-body pt-3">
                     <p>
-                        1. The Buzzword Generator consists of three columns of buzzwords numbered zero to nine.
+                        To create a Shakespearean insult...
                     </p>
                     <p>
-                        2. The procedure is simple. Think of any three digit number at random. Then select the corresponding
-                        buzzword from each column. Put them together and WHAM! POW! ZAP! You sound just like you know
-                        what you're talking about.
-                    </p>
-                    <p>
-                        3. Take for instance the number 257. Take word two from column one, word five from column two and word
-                        seven from column three. You now have "systemized logistical projection". You don't know what it
-                        means but don't worry, neither do "they".
-                    </p>
-                    <p>
-                        4. Would you prefer "balanced incremental flexibility". Possibly "parallel reciprocal options". Or
-                        maybe "integrated transitional contingency". How about "functional third-generation hardware"
-                        and "optimal management mobility". Now that ought to do the trick.
-                    </p>
-                    <p>
-                        5. The important thing is that the Buzzword Generator provides the user with the perfect aid for
-                        preparing anything on the subject of spaceflight. Automatically you have one thousand different
-                        combinations, all of which will give you that proper ring of decisive, progressive,
-                        knowledgeable authority.
+                        Combine one word from each of the three columns, prefaced with "Thou":
                     </p>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orig-img">
-                        Original Buzzword Generator
+                        Original Shakespeare Insult Kit
                     </button>
                     <div class="modal fade" id="orig-img" tabindex="-1">
                         <div class="modal-dialog" style="max-width: 600px">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" style="font-size: 16px;">Original Buzzword Generator</h5>
+                                    <h5 class="modal-title" style="font-size: 16px;">Original Shakespeare Insult Kit</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="col-md-4">
-                                        <img src="assets/img/c1d8b194-c0d8-4a81-b152-93a1b1fe6710.jfif" alt="Original Buzzword Generator">
+                                        <img src="assets/img/342889694_3530523573894436_7672415123078190943_n.jpg"
+                                            alt="Original Shakespeare Insult Kit" style="width: 30em;">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

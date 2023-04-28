@@ -7,10 +7,16 @@ import { HomeComponent } from '../components/pages/home/home.component';
 import { MockObjectComponent } from '../components/pages/mock-object/mock-object.component';
 import { PiComponent } from '../components/pages/pi/pi.component';
 import { PseudoIdentityComponent } from '../components/pages/pseudo-identity/pseudo-identity.component';
+import { ShakespeareInsultsComponent } from '../components/pages/shakespeare-insults/shakespeare-insults.component';
 
 export const routes: Routes = [{
     path: 'random/buzz-words',
     component: BuzzWordsComponent,
+    canActivate: [],
+    data: {}
+},{
+    path: 'random/shakespeare-insults',
+    component: ShakespeareInsultsComponent,
     canActivate: [],
     data: {}
 }, {
