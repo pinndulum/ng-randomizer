@@ -1,7 +1,8 @@
-import { Location } from '@angular/common';
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ndx_sig_of } from '@joxnathan/mock-randomizer/dist/lib/filler';
 import { Observable, Subject } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, tap } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { MockService } from 'src/app/services/mock.service';
   templateUrl: './shakespeare-insults.component.html',
   styleUrls: ['./shakespeare-insults.component.scss']
 })
-export class ShakespeareInsultsComponent implements AfterViewInit {
+export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
 
   public readonly word_lists = insults;
   public readonly insults$: Observable<string>;
@@ -17,22 +18,27 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
   private readonly word_sub: Subject<string> = new Subject();
   
   constructor(
-    private loc: Location,
+    private rtr: Router,
+    private rte: ActivatedRoute,
     private mock: MockService
   ) {
     this.insults$ = this.word_sub.pipe(
       delay(0)
     );
   }
-
+  
+  ngOnInit(): void {
+    this.rte.queryParamMap.pipe(
+      tap(params => {
+        this.load_query(params);
+      }) 
+    ).subscribe();
+  }
+  
   ngAfterViewInit(): void {
-    const query = new URLSearchParams(location.search);
-    const [x, y, z] = [
-      Number(query.get('x') ?? -1),
-      Number(query.get('y') ?? -1),
-      Number(query.get('z') ?? -1)
-    ];
-    this.load(x, y, z);
+    this.load_query(
+      new URLSearchParams(location.search)
+    );
   }
 
   load = (x?: number, y?: number, z?: number) => {
@@ -44,16 +50,23 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
       }
       words.push(word);
     });
-
     this.word_sub.next(words.join(' '));
+    
     const params = new URLSearchParams(location.search);
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, insults[i].indexOf(words[i]).toString());
     });
     const search = params.toString();
-    if (search !== location.search) {
-      const state = this.loc.getState();
-      this.loc.replaceState('random/shakespeare-insults', search, state);
+    const path = '/random/shakespeare-insults';
+    if (search !== location.search.slice(1)) {
+      this.rtr.navigate([path], {
+        queryParams: {
+          ...Array.from(params.entries())
+            .map(([k, v]) => ({[k]: v}))
+            .reduce((next, curr) => ({...next, ...curr}), {})
+        },
+        queryParamsHandling: 'merge'
+      });
     }
   };
 
@@ -72,12 +85,21 @@ export class ShakespeareInsultsComponent implements AfterViewInit {
       voices = synth.getVoices();
     }
     const speech = new utter(text);
-    speech.voice = voices[voice ?? 2];
+    speech.voice = voices[voice ?? 2] ?? voices[0];
     if (synth.speaking) {
       synth.cancel();
     }
     synth.speak(speech);
-  }
+  };
+
+  private load_query = (params: ParamMap | URLSearchParams) => {
+    const [x, y, z] = [
+      Number(params.get('x') ?? -1),
+      Number(params.get('y') ?? -1),
+      Number(params.get('z') ?? -1)
+    ];
+    this.load(x, y, z);
+  };
 }
 
 const insults: [string[], string[], string[]] = [[

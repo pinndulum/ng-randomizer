@@ -1,7 +1,7 @@
-import { Location } from '@angular/common';
-import { AfterViewInit, Component } from '@angular/core';
+import { OnInit, Component, AfterViewInit } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, tap } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { MockService } from 'src/app/services/mock.service';
   templateUrl: './buzz-words.component.html',
   styleUrls: ['./buzz-words.component.scss']
 })
-export class BuzzWordsComponent implements AfterViewInit {
+export class BuzzWordsComponent implements OnInit, AfterViewInit {
 
   public readonly word_lists = buzz_words;
   public readonly buzz_words$: Observable<string>;
@@ -17,7 +17,8 @@ export class BuzzWordsComponent implements AfterViewInit {
   private readonly word_sub: Subject<string> = new Subject();
   
   constructor(
-    private loc: Location,
+    private rtr: Router,
+    private rte: ActivatedRoute,
     private mock: MockService
   ) {
     this.buzz_words$ = this.word_sub.pipe(
@@ -25,14 +26,18 @@ export class BuzzWordsComponent implements AfterViewInit {
     );
   }
 
+  ngOnInit(): void {
+    this.rte.queryParamMap.pipe(
+      tap(params => {
+        this.load_query(params);
+      }) 
+    ).subscribe();
+  }
+  
   ngAfterViewInit(): void {
-    const query = new URLSearchParams(location.search);
-    const [x, y, z] = [
-      Number(query.get('x') ?? -1),
-      Number(query.get('y') ?? -1),
-      Number(query.get('z') ?? -1)
-    ];
-    this.load(x, y, z);
+    this.load_query(
+      new URLSearchParams(location.search)
+    );
   }
 
   load = (x?: number, y?: number, z?: number) => {
@@ -44,17 +49,33 @@ export class BuzzWordsComponent implements AfterViewInit {
       }
       words.push(word);
     });
-
     this.word_sub.next(words.join(' '));
+
     const params = new URLSearchParams(location.search);
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, buzz_words[i].indexOf(words[i]).toString());
     });
     const search = params.toString();
-    if (search !== location.search) {
-      const state = this.loc.getState();
-      this.loc.replaceState('random/buzz-words', search, state);
+    const path = '/random/buzz-words';
+    if (search !== location.search.slice(1)) {
+      this.rtr.navigate([path], {
+        queryParams: {
+          ...Array.from(params.entries())
+            .map(([k, v]) => ({[k]: v}))
+            .reduce((next, curr) => ({...next, ...curr}), {})
+        },
+        queryParamsHandling: 'merge'
+      });
     }
+  };
+
+  private load_query = (params: ParamMap | URLSearchParams) => {
+    const [x, y, z] = [
+      Number(params.get('x') ?? -1),
+      Number(params.get('y') ?? -1),
+      Number(params.get('z') ?? -1)
+    ];
+    this.load(x, y, z);
   };
 }
 
