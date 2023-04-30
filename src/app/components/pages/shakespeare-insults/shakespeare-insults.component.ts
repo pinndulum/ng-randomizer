@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ndx_sig_of } from '@joxnathan/mock-randomizer/dist/lib/filler';
 import { Observable, Subject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
+
+const utter = SpeechSynthesisUtterance;
 
 @Component({
   selector: 'app-shakespeare-insults',
@@ -13,6 +14,7 @@ import { MockService } from 'src/app/services/mock.service';
 export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
 
   public readonly word_lists = insults;
+  public readonly synth?: SpeechSynthesis;
   public readonly insults$: Observable<string>;
 
   private readonly word_sub: Subject<string> = new Subject();
@@ -22,6 +24,7 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
     private rte: ActivatedRoute,
     private mock: MockService
   ) {
+    this.synth = speechSynthesis;
     this.insults$ = this.word_sub.pipe(
       delay(0)
     );
@@ -68,12 +71,11 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
   };
 
   sayit = async (text?: string, voice?: number) => {
-    if (!text) {
+    const synth = this.synth;
+    if (!synth || !text) {
       return;
     }
 
-    const synth = speechSynthesis;
-    const utter = SpeechSynthesisUtterance;
     let voices = synth.getVoices();
     if (!voices.length) {    
       await new Promise(resolve =>
@@ -81,8 +83,14 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
       );
       voices = synth.getVoices();
     }
+
+    const vndx = [voice, 2, 0].first(x => !!voices[Number(x)]);
+    if(!vndx) {
+      return;
+    }
+
     const speech = new utter(text);
-    speech.voice = voices[voice ?? 2] ?? voices[0];
+    speech.voice = voices[vndx];
     if (synth.speaking) {
       synth.cancel();
     }
