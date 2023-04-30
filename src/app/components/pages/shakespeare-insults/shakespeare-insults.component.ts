@@ -56,18 +56,15 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, insults[i].indexOf(words[i]).toString());
     });
-    const search = params.toString();
-    const path = '/random/shakespeare-insults';
-    if (search !== location.search.slice(1)) {
-      this.rtr.navigate([path], {
-        queryParams: {
-          ...Array.from(params.entries())
-            .map(([k, v]) => ({[k]: v}))
-            .reduce((next, curr) => ({...next, ...curr}), {})
-        },
-        queryParamsHandling: 'merge'
-      });
-    }
+    this.rtr.navigate([location.pathname], {
+      replaceUrl: !location.search,
+      queryParams: {
+        ...Array.from(params.entries())
+          .map(([k, v]) => ({[k]: v}))
+          .reduce((next, curr) => ({...next, ...curr}), {})
+      },
+      queryParamsHandling: 'merge'
+    });
   };
 
   sayit = async (text?: string, voice?: number) => {
