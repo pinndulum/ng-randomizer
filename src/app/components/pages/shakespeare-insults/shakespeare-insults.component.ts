@@ -59,7 +59,7 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, insults[i].indexOf(words[i]).toString());
     });
-    this.rtr.navigate([location.pathname], {
+    this.rtr.navigate(['/random/shakespeare-insults'], {
       replaceUrl: !location.search,
       queryParams: {
         ...Array.from(params.entries())

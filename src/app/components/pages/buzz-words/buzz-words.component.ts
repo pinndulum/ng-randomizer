@@ -55,7 +55,7 @@ export class BuzzWordsComponent implements OnInit, AfterViewInit {
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, buzz_words[i].indexOf(words[i]).toString());
     });
-    this.rtr.navigate([location.pathname], {
+    this.rtr.navigate(['/random/buzz-words'], {
       replaceUrl: !location.search,
       queryParams: {
         ...Array.from(params.entries())
