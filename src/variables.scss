@@ -1,26 +1,28 @@
-$light-primary: mat.define-palette(mat.$grey-palette);
-$light-accent: mat.define-palette(mat.$indigo-palette);
-$light-theme: mat.define-light-theme((
-    color: (
-        primary: $light-primary,
-        accent: $light-accent
-    ))
-);
+@use '@angular/material' as mat;
 
-$dark-primary: mat.define-palette(mat.$blue-grey-palette);
-$dark-accent: mat.define-palette(mat.$grey-palette);
-$dark-theme: mat.define-dark-theme((
-    color: (
-        primary: $dark-primary,
-        accent: $dark-accent
-    )
+$light-primary: mat.m2-define-palette(mat.$m2-grey-palette);
+$light-accent: mat.m2-define-palette(mat.$m2-indigo-palette);
+$light-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent
+  )
 ));
 
-$blue-primary: mat.define-palette(mat.$blue-palette);
-$blue-accent: mat.define-palette(mat.$light-blue-palette);
-$blue-theme: mat.define-light-theme((
-    color: (
-        primary: $blue-primary,
-        accent: $blue-accent
-    )
+$dark-primary: mat.m2-define-palette(mat.$m2-blue-grey-palette);
+$dark-accent: mat.m2-define-palette(mat.$m2-grey-palette);
+$dark-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent
+  )
+));
+
+$blue-primary: mat.m2-define-palette(mat.$m2-blue-palette);
+$blue-accent: mat.m2-define-palette(mat.$m2-light-blue-palette);
+$blue-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $blue-primary,
+    accent: $blue-accent
+  )
 ));

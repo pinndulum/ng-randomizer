@@ -10,6 +10,7 @@ import { LoadingService } from './services/loading.service';
 import { PrefsService } from './services/prefs.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

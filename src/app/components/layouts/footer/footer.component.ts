@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import dates from 'src/app/utils/dates';
 
 @Component({
+  standalone: false,
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss']

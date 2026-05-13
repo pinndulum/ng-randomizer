@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'precision' })
+@Pipe({ standalone: false, name: 'precision' })
 export class PrecisionPipe implements PipeTransform {
     transform (value: number | string | undefined, precision?: number) {
         value = Number(value);

@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { AppConfig, IAppConfig } from './app/interfaces/app-config.interface';
@@ -32,6 +32,6 @@ fetch_cfg().then(x => {
   const cfg = new AppConfig(x);
   platformBrowserDynamic([
     { provide: AppConfig, useValue: cfg }
-  ]).bootstrapModule(AppModule)
+  ]).bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], })
     .catch(err => console.error(err));
 });

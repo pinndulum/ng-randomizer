@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.json-editor-host,
+:host ::ng-deep .jsoneditor,
+:host ::ng-deep textarea.jsoneditor-text {
+  min-height: var(--json-editor-min-height, 500px);
+}

@@ -13,6 +13,7 @@ export interface ButtonAction {
 }
 
 @Component({
+  standalone: false,
     selector: 'app-dialog-template',
     templateUrl: './dialog-template.component.html',
     styleUrls: ['./dialog-template.component.scss']

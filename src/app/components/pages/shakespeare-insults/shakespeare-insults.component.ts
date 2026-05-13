@@ -7,6 +7,7 @@ import { MockService } from 'src/app/services/mock.service';
 const utter = SpeechSynthesisUtterance;
 
 @Component({
+  standalone: false,
   selector: 'app-shakespeare-insults',
   templateUrl: './shakespeare-insults.component.html',
   styleUrls: ['./shakespeare-insults.component.scss']

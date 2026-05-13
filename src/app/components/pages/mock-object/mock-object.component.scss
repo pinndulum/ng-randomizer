@@ -1,7 +1,6 @@
-:host ::ng-deep json-editor,
-:host ::ng-deep json-editor .jsoneditor,
-:host ::ng-deep json-editor>div,
-:host ::ng-deep json-editor jsoneditor-outer,
+:host ::ng-deep app-json-editor,
+:host ::ng-deep app-json-editor .jsoneditor,
+:host ::ng-deep app-json-editor > div,
 :host ::ng-deep textarea.jsoneditor-text {
     min-height: 500px;
 }

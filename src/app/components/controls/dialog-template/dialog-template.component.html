@@ -1,14 +1,18 @@
 <div class="header">
-    <h1 mat-dialog-title>{{ title }}</h1>
+  <h1 mat-dialog-title>{{ title }}</h1>
 </div>
-<div mat-dialog-content *ngIf="message">
+@if (message) {
+  <div mat-dialog-content>
     <p class="dialog-message" [innerHtml]="message | safe: 'html'"></p>
-</div>
-<div mat-dialog-content *ngIf="iframe">
+  </div>
+}
+@if (iframe) {
+  <div mat-dialog-content>
     <iframe [src]="iframe.src" [title]="iframe.title"></iframe>
-</div>
+  </div>
+}
 <div mat-dialog-actions>
-    <ng-container *ngFor="let button of buttons">
-        <button mat-button (click)="onPress(button)">{{button.title}}</button>
-    </ng-container>
+  @for (button of buttons; track button) {
+    <button mat-button (click)="onPress(button)">{{button.title}}</button>
+  }
 </div>

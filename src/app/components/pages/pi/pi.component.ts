@@ -4,6 +4,7 @@ import { concatMap, delay, tap } from 'rxjs/operators';
 import { PiProgress, PiService } from 'src/app/services/pi.service';
 
 @Component({
+  standalone: false,
     selector: 'app-pi',
     templateUrl: './pi.component.html',
     styleUrls: ['./pi.component.scss']

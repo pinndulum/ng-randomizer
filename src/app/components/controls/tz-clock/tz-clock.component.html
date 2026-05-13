@@ -1,11 +1,13 @@
-<div class="card" *ngIf="zone.title">
+@if (zone.title) {
+  <div class="card">
     <div class="card-body">
-        <h4 class="card-title">{{zone.title}}</h4>
-        <p class="card-text">
-            {{dt | date : 'mediumDate' : tz?.name }}
-        </p>
-        <p class="card-text">
-            {{dt | date: 'mediumTime' : tz?.name}}
-        </p>
+      <h4 class="card-title">{{zone.title}}</h4>
+      <p class="card-text">
+        {{dt | date : 'mediumDate' : tz?.name }}
+      </p>
+      <p class="card-text">
+        {{dt | date: 'mediumTime' : tz?.name}}
+      </p>
     </div>
-</div>
+  </div>
+}

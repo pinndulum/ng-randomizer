@@ -17,7 +17,7 @@ export type SafeResult = SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResou
         <a [href]="files[key] | safe: 'resourceUrl'" />
 */
 
-@Pipe({ name: 'safe' })
+@Pipe({ standalone: false, name: 'safe' })
 export class SafePipe implements PipeTransform {
     protected readonly fn: { [key in SafeTransform]: (v: string) => SafeResult; };
 

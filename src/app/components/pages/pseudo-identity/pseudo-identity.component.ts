@@ -1,30 +1,29 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Gender, MockService, NameComponents } from 'src/app/services/mock.service';
 import dates from 'src/app/utils/dates';
 
 @Component({
+  standalone: false,
   selector: 'app-pseudo-identity',
   templateUrl: './pseudo-identity.component.html',
   styleUrls: ['./pseudo-identity.component.scss']
 })
-export class PseudoIdentityComponent implements AfterViewInit {
+export class PseudoIdentityComponent {
 
   public loading = false;
   public readonly ident$: Observable<any>;
 
-  private readonly ident: Subject<any> = new Subject();
+  private readonly ident: BehaviorSubject<any>;
 
   constructor(private mock: MockService) {
+    this.ident = new BehaviorSubject(this.mock.realistic.identity());
     this.ident$ = this.ident.pipe(
       tap(() => { this.loading = false; }),
     );
   }
 
-  ngAfterViewInit(): void {
-    this.load();
-  }
 
   load = (ident?: any) => {
     this.loading = true;

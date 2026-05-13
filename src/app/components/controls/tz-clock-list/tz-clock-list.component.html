@@ -1,5 +1,5 @@
 <div class="card-group">
-    <ng-container *ngFor="let item of items">
-        <app-tz-clock [zone]="item"></app-tz-clock>
-    </ng-container>
+  @for (item of items; track item) {
+    <app-tz-clock [zone]="item"></app-tz-clock>
+  }
 </div>

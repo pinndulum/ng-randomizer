@@ -1,5 +1,5 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { mergeMap, skip, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
 import { MockService } from 'src/app/services/mock.service';
@@ -23,16 +23,17 @@ interface HistoryItem {
   }[];
 }
 @Component({
+  standalone: false,
   selector: 'app-change-log-history',
   templateUrl: './change-log-history.component.html',
   styleUrls: ['./change-log-history.component.scss']
 })
-export class ChangeLogHistoryComponent implements AfterViewInit {
+export class ChangeLogHistoryComponent implements OnInit {
 
   public readonly change_history$: Observable<HistoryItem[]>;
 
   private mock_logs$!: Observable<HistoryItem[]>;
-  private readonly page_sub: Subject<number> = new Subject();
+  private readonly page_sub: BehaviorSubject<number> = new BehaviorSubject(0);
 
   public readonly pg = {
     perpg: 10,
@@ -67,44 +68,48 @@ export class ChangeLogHistoryComponent implements AfterViewInit {
     );
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.mock_logs$ = of(
       this.mock.complex.list<HistoryItem>({
-        Id: 'guid',
-        TimeStamp: 'date:now:now',
-        User: { Id: 'number:100:501', Name: 'string:8', Email: 'email' },
+        Id: { $mock: 'guid' },
+        TimeStamp: { $mock: 'date', min: 'now', max: 'now' },
+        User: {
+          Id: { $mock: 'number', min: 100, max: 501 },
+          Name: { $mock: 'string', size: 8 },
+          Email: { $mock: 'email' }
+        },
         Data: [{
-          Id: 'guid',
-          ChangeType: 'choose:Insert,Update,Delete',
-          RecordId: 'number:10:41',
-          TableName: 'choose:Claimant,Processor,Advisor,Supervisor,Client,Vendor',
-          FieldName: 'choose:Id,Name,Address,City,State,Zip'
+          Id: { $mock: 'guid' },
+          ChangeType: { $mock: 'choose', choices: ['Insert', 'Update', 'Delete'] },
+          RecordId: { $mock: 'number', min: 10, max: 41 },
+          TableName: { $mock: 'choose', choices: ['Claimant', 'Processor', 'Advisor', 'Supervisor', 'Client', 'Vendor'] },
+          FieldName: { $mock: 'choose', choices: ['Id', 'Name', 'Address', 'City', 'State', 'Zip'] }
         }]
-      }, { min: 11, max: 75 }, { Data: { max: 4 } }).map(entry => {
+      }, { range: { min: 11, max: 75 }, Data: { min: 1, max: 4 } }).map(entry => {
         const getData = () => this.mock.complex.object({
-          Id: 'number:1000:2001',
-          version: 'ver',
-          Name: '',
-          Value: '',
-          FullName: 'fullname',
-          FirstName: 'firstname',
-          LastName: 'lastname',
-          Company: 'company',
-          Street: 'street',
-          City: 'city',
-          State: 'state',
-          Zip: 'zip',
-          Tz: 'tz',
-          Phone: 'phone',
-          Email: 'email',
-          Book: 'title',
-          TypeSet: 'typeset',
-          Locations: [],
-          HasApproval: 'boolean',
-          CreatedOn: 'date:today-12M:now-1M',
-          CreatedBy: '',
-          ModifiedOn: 'date:today-7d:now',
-          ModifiedBy: ''
+          Id: { $mock: 'number', min: 1000, max: 2001 },
+          version: { $mock: 'ver' },
+          Name: { $mock: 'string' },
+          Value: { $mock: 'string', minLength: 4, maxLength: 8 },
+          FullName: { $mock: 'fullname' },
+          FirstName: { $mock: 'firstname' },
+          LastName: { $mock: 'lastname' },
+          Company: { $mock: 'company' },
+          Street: { $mock: 'street' },
+          City: { $mock: 'city' },
+          State: { $mock: 'state' },
+          Zip: { $mock: 'zip' },
+          Tz: { $mock: 'tz' },
+          Phone: { $mock: 'phone' },
+          Email: { $mock: 'email' },
+          Book: { $mock: 'title' },
+          TypeSet: { $mock: 'typeset' },
+          Locations: [{ $mock: 'city' }],
+          HasApproval: { $mock: 'boolean' },
+          CreatedOn: { $mock: 'date', min: 'today-12M', max: 'now-1M' },
+          CreatedBy: { $mock: 'string' },
+          ModifiedOn: { $mock: 'date', min: 'today-7D', max: 'now' },
+          ModifiedBy: { $mock: 'string' }
         }, { Locations: { min: 1, max: 3 } });
         for (const data of entry.Data || []) {
           const vals = {
@@ -123,11 +128,10 @@ export class ChangeLogHistoryComponent implements AfterViewInit {
         this.pg.pages.push(...Array(pgcount).keys());
       })
     );
-    this.page_sub.next(0);
   }
 
   change_type_icon = (type: 'Insert' | 'Update' | 'Delete') => {
-    let icon = 'bi-clipboard';
+    const icon = 'bi-clipboard';
     switch (type) {
       case 'Insert':
         return `${icon}-plus`;

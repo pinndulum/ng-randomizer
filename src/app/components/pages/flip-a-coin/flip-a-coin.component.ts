@@ -8,6 +8,7 @@ const coin_sides = ['heads', 'tails'] as const;
 type side = typeof coin_sides[number];
 
 @Component({
+  standalone: false,
   selector: 'app-flip-a-coin',
   templateUrl: './flip-a-coin.component.html',
   styleUrls: ['./flip-a-coin.component.scss']

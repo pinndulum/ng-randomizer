@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { JsonEditorOptions } from '@maaxgr/ang-jsoneditor';
 import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
 import { MockService } from 'src/app/services/mock.service';
 
 interface EditorObj {
-    opts: JsonEditorOptions;
     data: ndx_sig_of<unknown>;
-    mock?: object;
+    error?: string | null;
+    mock?: unknown;
 }
 
 @Component({
+  standalone: false,
   selector: 'app-mock-object',
   templateUrl: './mock-object.component.html',
   styleUrls: ['./mock-object.component.scss']
@@ -20,60 +20,70 @@ export class MockObjectComponent {
 
   constructor (private mock: MockService) {
     this.editobj = {
-      opts: this.makeOptions(),
       data: {
-        Id: 'guid',
-        TimeStamp: 'date:now:now',
-        User: { 
-          Id: 'number:100:501',
-          Name: 'string:8',
-          Email: 'email'
+        Id: { $mock: 'guid' },
+        TimeStamp: { $mock: 'date', min: 'now', max: 'now' },
+        User: {
+          Id: { $mock: 'number', min: 100, max: 501 },
+          Name: { $mock: 'string', size: 8 },
+          Email: { $mock: 'email' }
         },
         Data: [{
-          Id: 'number:1000:2001',
-          ChangeType: 'choose:Insert,Update,Delete',
-          RecordId: 'number:10:41',
-          TableName: 'choose:Claimant,Processor,Advisor,Supervisor,Client,Vendor',
-          FieldName: 'choose:Id,Name,Address,City,State,Zip',
-          version: 'ver',
-          Name: '',
-          Value: '',
-          FullName: 'fullname',
-          FirstName: 'firstname',
-          LastName: 'lastname',
-          Company: 'company',
-          Street: 'street',
-          City: 'city',
-          State: 'state',
-          Zip: 'zip',
-          Tz: 'tz',
-          Phone: 'phone',
-          Email: 'email',
-          Book: 'title',
-          TypeSet: 'typeset',
-          Locations: [],
-          HasApproval: 'boolean',
-          CreatedOn: 'date:today-12M:now-1M',
-          CreatedBy: '',
-          ModifiedOn: 'date:today-7d:now',
-          ModifiedBy: ''
+          Id: { $mock: 'number', min: 1000, max: 2001 },
+          ChangeType: { $mock: 'choose', choices: ['Insert', 'Update', 'Delete'] },
+          RecordId: { $mock: 'number', min: 10, max: 41 },
+          TableName: { $mock: 'choose', choices: ['Claimant', 'Processor', 'Advisor', 'Supervisor', 'Client', 'Vendor'] },
+          FieldName: { $mock: 'choose', choices: ['Id', 'Name', 'Address', 'City', 'State', 'Zip'] },
+          version: { $mock: 'ver' },
+          Name: { $mock: 'string' },
+          Value: { $mock: 'string', minLength: 4, maxLength: 8 },
+          FullName: { $mock: 'fullname' },
+          FirstName: { $mock: 'firstname' },
+          LastName: { $mock: 'lastname' },
+          Company: { $mock: 'company' },
+          Street: { $mock: 'street' },
+          City: { $mock: 'city' },
+          State: { $mock: 'state' },
+          Zip: { $mock: 'zip' },
+          Tz: { $mock: 'tz' },
+          Phone: { $mock: 'phone' },
+          Email: { $mock: 'email' },
+          Book: { $mock: 'title' },
+          TypeSet: { $mock: 'typeset' },
+          Locations: [{ $mock: 'city' }],
+          HasApproval: { $mock: 'boolean' },
+          CreatedOn: { $mock: 'date', min: 'today-12M', max: 'now-1M' },
+          CreatedBy: { $mock: 'string' },
+          ModifiedOn: { $mock: 'date', min: 'today-7D', max: 'now' },
+          ModifiedBy: { $mock: 'string' }
         }]
       }
     };
     this.mockdata();
   }
 
-  public mockdata = () => {
-    this.editobj.mock = this.mock.complex.object(this.editobj.data);
+  public readonly templateChanged = (value: unknown) => {
+    this.editobj.data = value as ndx_sig_of<unknown>;
+    this.editobj.error = null;
   };
 
-  private makeOptions = () => {
-    const opts = new JsonEditorOptions();
-    opts.mode = 'text';
-    opts.expandAll = true;
-    opts.onChangeText = str => {
-      this.editobj.data = JSON.parse(str)
-    };
-    return opts;
+  public readonly templateErrorChanged = (message: string | null) => {
+    this.editobj.error = message;
+  };
+
+  public mockdata = () => {
+    if (this.editobj.error) {
+      return;
+    }
+
+    try {
+      this.editobj.mock = this.mock.complex.object(this.editobj.data, {
+        Data: { min: 1, max: 4 },
+        Locations: { min: 1, max: 3 }
+      });
+      this.editobj.error = null;
+    } catch (error) {
+      this.editobj.error = error instanceof Error ? error.message : `${error}`;
+    }
   };
 }

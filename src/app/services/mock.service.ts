@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import mock from '@joxnathan/mock-randomizer';
-import { Gender, Name, NameComponents } from '@joxnathan/mock-randomizer/dist/lib/name.generator';
-import { NumericRange } from '@joxnathan/mock-randomizer/dist/lib/numeric.range';
+import { filledList, filledObject } from '@joxnathan/mock-randomizer/lib/filler';
+import type { FillListOptions, FillOptions } from '@joxnathan/mock-randomizer/lib/filler';
+import { Guid as guid } from '@joxnathan/mock-randomizer/lib/guid';
+import { NameGenerator as names } from '@joxnathan/mock-randomizer/lib/name.generator';
+import { Random as random } from '@joxnathan/mock-randomizer/lib/random';
+import { Realistic as realistic } from '@joxnathan/mock-randomizer/lib/realistic';
+import { Gender, Name, NameComponents } from '@joxnathan/mock-randomizer/lib/name.generator';
+import { NumericRange } from '@joxnathan/mock-randomizer/lib/numeric.range';
 import { ndx_sig_of } from '../interfaces/index-signature-of-t.interface';
 import dates from '../utils/dates';
 
@@ -11,48 +16,48 @@ export { Gender, Name, NameComponents, NumericRange };
 export class MockService {
 
   complex = {
-    list: <T>(template: T | ndx_sig_of<unknown>, range?: NumericRange, inner?: ndx_sig_of<NumericRange>) =>
-      mock.filledList<T>(template, range, inner),
-    object: <T>(template: T | ndx_sig_of<unknown>, opts?: ndx_sig_of<any>) =>
-      mock.filledObject<T>(template, opts)
+    list: <T>(template: T | ndx_sig_of<unknown>, opts?: FillListOptions | NumericRange, inner?: ndx_sig_of<NumericRange>) =>
+      filledList<T>(template, this.toListOptions(opts, inner)),
+    object: <T>(template: T | ndx_sig_of<unknown>, opts?: FillOptions) =>
+      filledObject<T>(template, opts)
   };
 
   random = {
-    guid: () => mock.guid.newGuid(),
-    bool: () => mock.random.nextBool(),
-    int: (range?: NumericRange, inclusive?: boolean) => mock.random.nextInt(range, inclusive),
-    decimal: (range?: NumericRange) => mock.random.nextDec(range),
-    date: (start?: Date, end?: Date) => mock.random.nextDate(start, end),
-    numeric: (size?: number, format?: string) => mock.random.nextNumericString(size, format),
-    string: (size?: number, cased?: 'upper' | 'lower' | 'mixed', format?: string) => mock.random.nextString(size, cased, format),
+    guid: () => guid.newGuid(),
+    bool: () => random.nextBool(),
+    int: (range?: NumericRange, inclusive?: boolean) => random.nextInt(range, inclusive),
+    decimal: (range?: NumericRange) => random.nextDec(range),
+    date: (start?: Date, end?: Date) => random.nextDate(start, end),
+    numeric: (size?: number, format?: string) => random.nextNumericString(size, format),
+    string: (size?: number, cased?: 'upper' | 'lower' | 'mixed', format?: string) => random.nextString(size, cased, format),
   };
 
   realistic = {
-    from: <T>(from: T[], except?: T[]) => mock.realistic.nextItem<T>(from, except),
+    from: <T>(from: T[], except?: T[]) => realistic.nextItem<T>(from, except),
 
     names: {
       gender: () => this.realistic.from([Gender.Female, Gender.Male]),
-      book_title: (...ignore: string[]) => mock.names.nextTitle(...ignore),
-      firstname: (gender?: Gender, ...ignore: string[]) => mock.names.nextFirstName(gender, ...ignore),
-      middlename: (gender?: Gender, ...ignore: string[]) => mock.names.nextMiddleName(gender, ...ignore),
-      lastname: (...ignore: string[]) => mock.names.nextLastName(...ignore),
-      fullname: (gender?: Gender, ...ignore: string[]) => mock.names.nextFullName(gender, ...ignore),
-      name: (component: NameComponents, gender?: Gender, ...ignore: string[]) => mock.names.nextName(component, gender, ...ignore)
+      book_title: (...ignore: string[]) => names.nextTitle(...ignore),
+      firstname: (gender?: Gender, ...ignore: string[]) => names.nextFirstName(gender, ...ignore),
+      middlename: (gender?: Gender, ...ignore: string[]) => names.nextMiddleName(gender, ...ignore),
+      lastname: (...ignore: string[]) => names.nextLastName(...ignore),
+      fullname: (gender?: Gender, ...ignore: string[]) => names.nextFullName(gender, ...ignore),
+      name: (component: NameComponents, gender?: Gender, ...ignore: string[]) => names.nextName(component, gender, ...ignore)
     },
 
-    city: () => mock.realistic.nextCity(),
-    street: (format?: 'full' | 'abbrev') => mock.realistic.nextStreet(format),
-    state: (format?: 'full' | 'abbrev') => mock.realistic.nextUSState(format),
-    postal_code: (state?: string, format?: 'standard' | 'plusfour') => mock.realistic.nextUSPostCode(state, format),
-    timezone: (state?: string, format?: 'full' | 'name' | 'abbrev') => mock.realistic.nextUsTimeZone(state, format),
-    phone: (state?: string) => mock.realistic.nextUSPhone(state),
-    phonenum: (state?: string) => mock.realistic.nextUSPhoneString(state),
-    email: (local?: string, domain?: string, tld?: string) => mock.realistic.nextEmail(local, domain, tld),
-    email_address: () => mock.realistic.nextEmailString(),
-    company: () => mock.realistic.nextCompanyName(),
-    typeset: () => mock.realistic.nextTypeSet(),
-    nouns: (range?: NumericRange) => mock.realistic.nextNouns(range),
-    version: (build?: boolean, patch?: boolean) => mock.realistic.nextVersion(build, patch),
+    city: () => realistic.nextCity(),
+    street: (format?: 'full' | 'abbrev') => realistic.nextStreet(format),
+    state: (format?: 'full' | 'abbrev') => realistic.nextUSState(format),
+    postal_code: (state?: string, format?: 'standard' | 'plusfour') => realistic.nextUSPostCode(state, format),
+    timezone: (state?: string, format?: 'full' | 'name' | 'abbrev') => realistic.nextUsTimeZone(state, format),
+    phone: (state?: string) => realistic.nextUSPhone(state),
+    phonenum: (state?: string) => realistic.nextUSPhoneString(state),
+    email: (local?: string, domain?: string, tld?: string) => realistic.nextEmail(local, domain, tld),
+    email_address: () => realistic.nextEmailString(),
+    company: () => realistic.nextCompanyName(),
+    typeset: () => realistic.nextTypeSet(),
+    nouns: (range?: NumericRange) => realistic.nextNouns(range),
+    version: (build?: boolean, patch?: boolean) => realistic.nextVersion(build, patch),
 
     ssn: () => {
       const { area, grp, serial } = {
@@ -66,12 +71,12 @@ export class MockService {
       const year = dates.current.year();
       const ccdgt = this.random.int({ min: 3, max: 6 }, true);
       const ccfmt = ccdgt === 3 ? 'xxx-xxxxxx-xxxx' : 'xxx-xxxx-xxxx-xxx';
-      const luhnlen = ccfmt.replace('-', '').length;
+      const luhnlen = ccfmt.replace(/-/g, '').length + 1;
       return this.complex.object({
-        card: `luhn:${luhnlen}:${ccdgt}${ccfmt}`,
-        month: 'number:1:12:true',
-        year: `number:${year + 1}:${year + 11}`,
-        cvv: `numstring:${ccdgt === 3 ? 4 : 3}`
+        card: { $mock: 'luhn', length: luhnlen, format: `${ccdgt}${ccfmt}` },
+        month: { $mock: 'number', min: 1, max: 12, inclusive: true },
+        year: { $mock: 'number', min: year + 1, max: year + 11 },
+        cvv: { $mock: 'numstring', length: ccdgt === 3 ? 4 : 3 }
       });
     },
     identity: (gender?: Gender) => {
@@ -99,4 +104,31 @@ export class MockService {
       };
     }
   };
+
+  private toListOptions(opts?: FillListOptions | NumericRange, inner?: ndx_sig_of<NumericRange>): FillListOptions | undefined {
+    if (!opts && !inner) {
+      return undefined;
+    }
+
+    if (this.isFillListOptions(opts)) {
+      return {
+        ...opts,
+        ...inner
+      };
+    }
+
+    return {
+      range: opts,
+      ...inner
+    };
+  }
+
+  private isFillListOptions(opts?: FillListOptions | NumericRange): opts is FillListOptions {
+    return !!opts && (
+      'range' in opts ||
+      'seed' in opts ||
+      'allowLegacyDsl' in opts ||
+      '$version' in opts
+    );
+  }
 }

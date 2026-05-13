@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { ClipboardModule } from '@angular/cdk/clipboard'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AngJsoneditorModule } from '@maaxgr/ang-jsoneditor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogTemplateComponent } from './components/controls/dialog-template/dialog-template.component';
+import { JsonEditorComponent } from './components/controls/json-editor/json-editor.component';
 import { TzClockComponent } from './components/controls/tz-clock/tz-clock.component';
 import { TzClockListComponent } from './components/controls/tz-clock-list/tz-clock-list.component';
 import { FooterComponent } from './components/layouts/footer/footer.component';
@@ -26,6 +26,7 @@ import * as pipes from './pipes';
   declarations: [
     AppComponent,
     DialogTemplateComponent,
+    JsonEditorComponent,
     TzClockComponent,
     TzClockListComponent,
     FooterComponent,
@@ -48,7 +49,6 @@ import * as pipes from './pipes';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AngJsoneditorModule,
     ClipboardModule,
     AppRoutingModule,
     MaterialModule

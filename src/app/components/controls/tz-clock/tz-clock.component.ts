@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import dates from 'src/app/utils/dates';
 
 export interface TZAbbrev {
@@ -26,6 +26,7 @@ export const tzGMT: TZItem = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-tz-clock',
   templateUrl: './tz-clock.component.html',
   styleUrls: ['./tz-clock.component.scss']

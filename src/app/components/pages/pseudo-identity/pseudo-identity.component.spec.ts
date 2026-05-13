@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PseudoIdentityComponent } from './pseudo-identity.component';
@@ -8,7 +9,8 @@ describe('PseudoIdentityComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PseudoIdentityComponent ]
+      declarations: [PseudoIdentityComponent],
+      imports: [ClipboardModule]
     })
     .compileComponents();
 

@@ -1,4 +1,6 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ChangeLogHistoryComponent } from './change-log-history.component';
 
@@ -8,7 +10,8 @@ describe('ChangeLogHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChangeLogHistoryComponent ]
+      declarations: [ChangeLogHistoryComponent],
+      imports: [ClipboardModule, MatTooltipModule]
     })
     .compileComponents();
 

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { tzGMT, TZItem } from '../tz-clock/tz-clock.component';
 
 @Component({
+  standalone: false,
   selector: 'app-tz-clock-list',
   templateUrl: './tz-clock-list.component.html',
   styleUrls: ['./tz-clock-list.component.scss']

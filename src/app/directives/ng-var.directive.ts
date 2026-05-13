@@ -5,6 +5,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 /// <ng-container *ngVar="user$ | async; let user">
 
 @Directive({
+  standalone: false,
     // eslint-disable-next-line @angular-eslint/directive-selector
     selector: '[ngVar]'
 })

@@ -5,6 +5,7 @@ import { delay, tap } from 'rxjs/operators';
 import { MockService } from 'src/app/services/mock.service';
 
 @Component({
+  standalone: false,
   selector: 'app-buzz-words',
   templateUrl: './buzz-words.component.html',
   styleUrls: ['./buzz-words.component.scss']
