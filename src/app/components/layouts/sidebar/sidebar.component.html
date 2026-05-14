@@ -1,40 +1,12 @@
 <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
+        @for (item of navItems; track item.routerLink) {
         <li class="nav-item">
-            <a class="nav-link" routerLink="/random/buzz-words">
-                <i class="bi bi-bug"></i>
-                <span>Buzzwords</span>
+            <a class="nav-link" [routerLink]="item.routerLink">
+                <i [class]="item.iconClass"></i>
+                <span>{{item.label}}</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/random/shakespeare-insults">
-                <i class="bi bi-chat-quote"></i>
-                <span>Shakespeare Insults</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/random/flip-a-coin">
-                <i class="bi bi-coin"></i>
-                <span>Flip A Coin</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/random/pseudo-identity">
-                <i class="bi bi-person"></i>
-                <span>Pseudo Identity</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/random/change-log-history">
-                <i class="bi bi-clock-history"></i>
-                <span>Change Log History</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/random/object/mock-dsl">
-                <i class="bi bi-stickies"></i>
-                <span>Mock DSL Fill</span>
-            </a>
-        </li>
+        }
     </ul>
 </aside>

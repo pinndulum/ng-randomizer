@@ -8,7 +8,7 @@ export const as_qs = (page: string, params: string | Record<string, string> | st
         }
         path += qs;
     }
-    return !!path ? path : undefined;
+    return path ? path : undefined;
 };
 
 export const location_qs = (params: string[][], path: string = location.pathname) => {

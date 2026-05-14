@@ -1,17 +1,16 @@
-<ng-container *ngVar="theme$ | async; let theme">
-  <div [ngClass]="theme">
-    <!-- loading spinner -->
-    @if (loading$ | async) {
-      <div class="loading-container flex-content-center">
-        <mat-progress-spinner color="primary" mode="indeterminate">
-        </mat-progress-spinner>
-      </div>
-    }
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
-    <div id="main" class="main-container main">
-      <router-outlet (activate)="componentActive($event)"></router-outlet>
+@let theme = theme$ | async;
+
+<div [class]="theme ?? ''">
+  <!-- loading spinner -->
+  @if (loading$ | async) {
+    <div class="loading-container flex-content-center">
+      <mat-progress-spinner color="primary" mode="indeterminate" />
     </div>
-    <app-footer></app-footer>
+  }
+  <app-header />
+  <app-sidebar />
+  <div id="main" class="main-container main">
+    <router-outlet (activate)="componentActive($event)" />
   </div>
-</ng-container>
+  <app-footer />
+</div>

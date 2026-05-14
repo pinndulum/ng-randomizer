@@ -1,5 +1,5 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { MockObjectComponent } from './mock-object.component';
 
@@ -9,10 +9,10 @@ describe('MockObjectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MockObjectComponent ],
-      schemas: [NO_ERRORS_SCHEMA]
+      imports: [MockObjectComponent],
+      providers: [provideRouter([])]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MockObjectComponent);
     component = fixture.componentInstance;

@@ -1,12 +1,12 @@
-@if (zone.title) {
+@if (zone().title) {
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">{{zone.title}}</h4>
+      <h4 class="card-title">{{zone().title}}</h4>
       <p class="card-text">
-        {{dt | date : 'mediumDate' : tz?.name }}
+        {{dt() | date : 'mediumDate' : tzOffset }}
       </p>
       <p class="card-text">
-        {{dt | date: 'mediumTime' : tz?.name}}
+        {{dt() | date: 'mediumTime' : tzOffset}}
       </p>
     </div>
   </div>

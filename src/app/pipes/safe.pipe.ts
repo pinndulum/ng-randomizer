@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl } from '@angular/platform-browser';
 
 export type SafeValue = string | File;
@@ -17,11 +17,13 @@ export type SafeResult = SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResou
         <a [href]="files[key] | safe: 'resourceUrl'" />
 */
 
-@Pipe({ standalone: false, name: 'safe' })
+@Pipe({ name: 'safe' })
 export class SafePipe implements PipeTransform {
+    protected sani = inject(DomSanitizer);
+
     protected readonly fn: { [key in SafeTransform]: (v: string) => SafeResult; };
 
-    constructor (protected sani: DomSanitizer) {
+    constructor () {
         this.fn = {
             html: this.sani.bypassSecurityTrustHtml,
             style: this.sani.bypassSecurityTrustStyle,

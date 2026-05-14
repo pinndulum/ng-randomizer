@@ -1,27 +1,29 @@
-import { OnInit, Component, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { OnInit, Component, AfterViewInit, inject } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-import { MockService } from 'src/app/services/mock.service';
+import { MockService } from '@app/services/mock.service';
+import { AsyncPipe } from '@angular/common';
+import { ROUTE_LINKS } from '@app/routing/route-paths';
 
 @Component({
-  standalone: false,
-  selector: 'app-buzz-words',
-  templateUrl: './buzz-words.component.html',
-  styleUrls: ['./buzz-words.component.scss']
+    selector: 'app-buzz-words',
+    templateUrl: './buzz-words.component.html',
+    styleUrls: ['./buzz-words.component.scss'],
+    imports: [RouterLink, AsyncPipe]
 })
 export class BuzzWordsComponent implements OnInit, AfterViewInit {
+  private rtr = inject(Router);
+  private rte = inject(ActivatedRoute);
+  private mock = inject(MockService);
 
-  public readonly word_lists = buzz_words;
-  public readonly buzz_words$: Observable<string>;
+
+  protected readonly word_lists = buzz_words;
+  protected readonly buzz_words$: Observable<string>;
 
   private readonly word_sub: Subject<string> = new Subject();
-  
-  constructor(
-    private rtr: Router,
-    private rte: ActivatedRoute,
-    private mock: MockService
-  ) {
+
+  constructor() {
     this.buzz_words$ = this.word_sub.pipe(
       delay(0)
     );
@@ -31,17 +33,17 @@ export class BuzzWordsComponent implements OnInit, AfterViewInit {
     this.rte.queryParamMap.pipe(
       tap(params => {
         this.load_query(params);
-      }) 
+      })
     ).subscribe();
   }
-  
+
   ngAfterViewInit(): void {
     this.load_query(
       new URLSearchParams(location.search)
     );
   }
 
-  load = (x?: number, y?: number, z?: number) => {
+  protected readonly load = (x?: number, y?: number, z?: number) => {
     const words: string[] = [];
     [x, y, z].forEach((n, i) => {
       let word = buzz_words[i][Number(n)];
@@ -56,7 +58,7 @@ export class BuzzWordsComponent implements OnInit, AfterViewInit {
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, buzz_words[i].indexOf(words[i]).toString());
     });
-    this.rtr.navigate(['/random/buzz-words'], {
+    this.rtr.navigate([ROUTE_LINKS.buzzWords], {
       replaceUrl: !location.search,
       queryParams: {
         ...Array.from(params.entries())

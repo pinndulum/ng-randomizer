@@ -8,8 +8,8 @@ describe('PiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PiComponent ]
-    })
+    imports: [PiComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PiComponent);

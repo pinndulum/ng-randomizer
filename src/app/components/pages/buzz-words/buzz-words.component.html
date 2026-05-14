@@ -78,29 +78,27 @@
             combinations, all of which will give you that proper ring of decisive, progressive,
             knowledgeable authority.
           </p>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orig-img">
+          <button type="button" class="btn btn-primary" (click)="sourceImageDialog.showModal()">
             Original Buzzword Generator
           </button>
-          <div class="modal fade" id="orig-img" tabindex="-1">
-            <div class="modal-dialog" style="max-width: 600px">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" style="font-size: 16px;">Original Buzzword Generator</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="col-md-4">
-                    <img src="assets/img/c1d8b194-c0d8-4a81-b152-93a1b1fe6710.jfif" alt="Original Buzzword Generator">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                  </button>
+          <dialog #sourceImageDialog class="source-image-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title fs-6">Original Buzzword Generator</h5>
+                <button type="button" class="btn-close" (click)="sourceImageDialog.close()" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="col-md-4">
+                  <img src="assets/img/c1d8b194-c0d8-4a81-b152-93a1b1fe6710.jfif" alt="Original Buzzword Generator">
                 </div>
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="sourceImageDialog.close()">
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
+          </dialog>
         </div>
       </div>
     </div>

@@ -1,57 +1,43 @@
 import { Routes } from '@angular/router';
-import { TzClockListComponent } from '../components/controls/tz-clock-list/tz-clock-list.component';
-import { BuzzWordsComponent } from '../components/pages/buzz-words/buzz-words.component';
-import { ChangeLogHistoryComponent } from '../components/pages/change-log-history/change-log-history.component';
-import { FlipACoinComponent } from '../components/pages/flip-a-coin/flip-a-coin.component';
-import { HomeComponent } from '../components/pages/home/home.component';
-import { MockObjectComponent } from '../components/pages/mock-object/mock-object.component';
-import { PiComponent } from '../components/pages/pi/pi.component';
-import { PseudoIdentityComponent } from '../components/pages/pseudo-identity/pseudo-identity.component';
-import { ShakespeareInsultsComponent } from '../components/pages/shakespeare-insults/shakespeare-insults.component';
+import { ROUTE_PATHS } from './route-paths';
 
 export const routes: Routes = [{
-    path: 'random/buzz-words',
-    component: BuzzWordsComponent,
-    canActivate: [],
-    data: {}
-},{
-    path: 'random/shakespeare-insults',
-    component: ShakespeareInsultsComponent,
-    canActivate: [],
-    data: {}
+    path: ROUTE_PATHS.random.buzzWords,
+    loadComponent: () => import('../components/pages/buzz-words/buzz-words.component')
+        .then(c => c.BuzzWordsComponent)
 }, {
-    path: 'random/flip-a-coin',
-    component: FlipACoinComponent,
-    canActivate: [],
+    path: ROUTE_PATHS.random.shakespeareInsults,
+    loadComponent: () => import('../components/pages/shakespeare-insults/shakespeare-insults.component')
+        .then(c => c.ShakespeareInsultsComponent)
+}, {
+    path: ROUTE_PATHS.random.flipACoin,
+    loadComponent: () => import('../components/pages/flip-a-coin/flip-a-coin.component')
+        .then(c => c.FlipACoinComponent),
     data: { min: 9, max: 25, inclusive: true }
 }, {
-    path: 'random/pseudo-identity',
-    component: PseudoIdentityComponent,
-    canActivate: [],
-    data: { }
+    path: ROUTE_PATHS.random.pseudoIdentity,
+    loadComponent: () => import('../components/pages/pseudo-identity/pseudo-identity.component')
+        .then(c => c.PseudoIdentityComponent)
 }, {
-    path: 'random/change-log-history',
-    component: ChangeLogHistoryComponent,
-    canActivate: [],
-    data: {}
+    path: ROUTE_PATHS.random.changeLogHistory,
+    loadComponent: () => import('../components/pages/change-log-history/change-log-history.component')
+        .then(c => c.ChangeLogHistoryComponent)
 }, {
-    path: 'random/object/mock-dsl',
-    component: MockObjectComponent,
-    canActivate: [],
-    data: {}
+    path: ROUTE_PATHS.random.mockDsl,
+    loadComponent: () => import('../components/pages/mock-object/mock-object.component')
+        .then(c => c.MockObjectComponent)
 }, {
-    path: 'not-so-random/pi',
-    component: PiComponent,
-    canActivate: [],
-    data: {}
+    path: ROUTE_PATHS.notSoRandom.pi,
+    loadComponent: () => import('../components/pages/pi/pi.component')
+        .then(c => c.PiComponent)
 }, {
-    path: 'not-so-random/world-clock',
-    component: TzClockListComponent,
-    canActivate: [],
-    data: {}
+    path: ROUTE_PATHS.notSoRandom.worldClock,
+    loadComponent: () => import('../components/controls/tz-clock-list/tz-clock-list.component')
+        .then(c => c.TzClockListComponent)
 }, {
-    path: '',
-    component: HomeComponent
+    path: ROUTE_PATHS.home,
+    loadComponent: () => import('../components/pages/home/home.component')
+        .then(c => c.HomeComponent)
 }, {
-    path: '**', redirectTo: ''
+    path: '**', redirectTo: ROUTE_PATHS.home
 }];

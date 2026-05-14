@@ -1,6 +1,6 @@
-/* eslint-disable id-blacklist */
 /* eslint-disable object-shorthand */
 
+declare global {
 interface String {
     /**
      * Returns a string with the first letter of each word capitalized.
@@ -19,6 +19,7 @@ interface String {
     encRegExp(): string;
     rmNonPrintChars(replaceValue?: string): string;
     uriEncode(): string;
+}
 }
 
 Object.defineProperty(String.prototype, 'titleCase', {
@@ -95,3 +96,5 @@ if (!String.prototype.includes) {
         }
     });
 }
+
+export {};

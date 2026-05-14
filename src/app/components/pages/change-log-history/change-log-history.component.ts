@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { mergeMap, skip, switchMap, take, tap, toArray } from 'rxjs/operators';
-import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
-import { MockService } from 'src/app/services/mock.service';
+import { ndx_sig_of } from '@app/interfaces/index-signature-of-t.interface';
+import { MockService } from '@app/services/mock.service';
+import { RouterLink } from '@angular/router';
+import { NgTemplateOutlet, AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
+import { MatTooltip } from '@angular/material/tooltip';
 
 interface HistoryItem {
   Id: string;
@@ -23,19 +27,21 @@ interface HistoryItem {
   }[];
 }
 @Component({
-  standalone: false,
-  selector: 'app-change-log-history',
-  templateUrl: './change-log-history.component.html',
-  styleUrls: ['./change-log-history.component.scss']
+    selector: 'app-change-log-history',
+    templateUrl: './change-log-history.component.html',
+    styleUrls: ['./change-log-history.component.scss'],
+    imports: [RouterLink, CdkCopyToClipboard, MatTooltip, NgTemplateOutlet, AsyncPipe, JsonPipe, DatePipe]
 })
 export class ChangeLogHistoryComponent implements OnInit {
+  private mock = inject(MockService);
 
-  public readonly change_history$: Observable<HistoryItem[]>;
+
+  protected readonly change_history$: Observable<HistoryItem[]>;
 
   private mock_logs$!: Observable<HistoryItem[]>;
   private readonly page_sub: BehaviorSubject<number> = new BehaviorSubject(0);
 
-  public readonly pg = {
+  protected readonly pg = {
     perpg: 10,
     current: 0,
     pages: [0],
@@ -57,7 +63,7 @@ export class ChangeLogHistoryComponent implements OnInit {
     }
   };
 
-  constructor(private mock: MockService) {
+  constructor() {
     this.change_history$ = this.page_sub.pipe(
       switchMap(x => this.mock_logs$.pipe(
         mergeMap(x => x),
@@ -130,7 +136,7 @@ export class ChangeLogHistoryComponent implements OnInit {
     );
   }
 
-  change_type_icon = (type: 'Insert' | 'Update' | 'Delete') => {
+  protected readonly change_type_icon = (type: 'Insert' | 'Update' | 'Delete') => {
     const icon = 'bi-clipboard';
     switch (type) {
       case 'Insert':

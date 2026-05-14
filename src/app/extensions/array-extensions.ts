@@ -1,48 +1,34 @@
 /* eslint-disable object-shorthand */
 
+declare global {
 interface Array<T> {
-    min<U>(fn: (o: T) => U): U;
-    max<U>(fn: (o: T) => U): U;
+    min(fn: (o: T) => number): number;
+    max(fn: (o: T) => number): number;
     equals(second: T[]): boolean;
-    exists(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
-    first(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T;
-    last(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T;
+    exists(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): boolean;
+    first(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T;
+    last(predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T;
     remove(value: T): number;
     clear(): void;
     distinct(): T[];
     intersect(second: T[]): T[];
     except(second: T[]): T[];
     union(second: T[]): T[];
-    sortBy(fn: (o: T) => any): void;
+    sortBy(fn: (o: T) => unknown): void;
+}
 }
 
 const defaultPredicate = (): unknown => true;
 
 Object.defineProperty(Array.prototype, 'min', {
-    value: function <T, U extends never>(this: Array<T>, fn: (o: T) => U): U {
-        const ary = this.map<any>(x => x);
-        for (let i = ary.length; i;) {
-            const o = ary[--i];
-            ary[i] = [].concat(o, fn.call(undefined, o));
-        }
-        for (let i = ary.length; i;) {
-            ary[--i] = ary[i][ary[i].length - 1];
-        }
-        return Math.min.apply(null, ary) as U;
+    value: function <T>(this: Array<T>, fn: (o: T) => number): number {
+        return Math.min(...this.map(x => fn.call(undefined, x)));
     }
 });
 
 Object.defineProperty(Array.prototype, 'max', {
-    value: function <T, U extends never>(this: Array<T>, fn: (o: T) => U): U {
-        const ary = this.map<any>(x => x);
-        for (let i = this.length; i;) {
-            const o = ary[--i];
-            ary[i] = [].concat(o, fn.call(undefined, o));
-        }
-        for (let i = ary.length; i;) {
-            ary[--i] = ary[i][ary[i].length - 1];
-        }
-        return Math.max.apply(null, ary) as U;
+    value: function <T>(this: Array<T>, fn: (o: T) => number): number {
+        return Math.max(...this.map(x => fn.call(undefined, x)));
     }
 });
 
@@ -55,21 +41,21 @@ Object.defineProperty(Array.prototype, 'equals', {
 });
 
 Object.defineProperty(Array.prototype, 'exists', {
-    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean {
+    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): boolean {
         predicate = predicate || defaultPredicate;
         return !!this.first(predicate, thisArg);
     }
 });
 
 Object.defineProperty(Array.prototype, 'first', {
-    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T {
+    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T {
         predicate = predicate || defaultPredicate;
         return this.filter(predicate, thisArg)[0];
     }
 });
 
 Object.defineProperty(Array.prototype, 'last', {
-    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T {
+    value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T {
         predicate = predicate || defaultPredicate;
         const filtered = this.filter(predicate, thisArg);
         return filtered[Math.max(1, filtered.length) - 1];
@@ -119,26 +105,23 @@ Object.defineProperty(Array.prototype, 'union', {
 });
 
 Object.defineProperty(Array.prototype, 'sortBy', {
-    value: function <T>(this: Array<T>, fn: (o: T) => any): void {
-        const ary = this.map<any>(x => x);
-        for (let i = ary.length; i;) {
-            const o = ary[--i];
-            ary[i] = [].concat(fn.call(undefined, o), o);
-        }
-        ary.sort((a, b) => {
-            for (let i = 0, len = a.length; i < len; ++i) {
-                if (a[i] !== b[i]) {
-                    return a[i] < b[i] ? -1 : 1;
-                }
-            }
-            return 0;
-        });
-        for (let i = ary.length; i;) {
-            ary[--i] = ary[i][ary[i].length - 1];
-        }
-        this.splice(0, this.length, ...ary);
+    value: function <T>(this: Array<T>, fn: (o: T) => unknown): void {
+        const keyed = this.map(value => ({
+            key: fn.call(undefined, value),
+            value
+        }));
+        keyed.sort((a, b) => compare(a.key, b.key));
+        this.splice(0, this.length, ...keyed.map(x => x.value));
     }
 });
+
+const compare = (a: unknown, b: unknown): number => {
+    if (a === b) {
+        return 0;
+    }
+
+    return String(a) < String(b) ? -1 : 1;
+};
 
 if (!Array.prototype.includes) {
     Object.defineProperty(Array.prototype, 'includes', {
@@ -149,8 +132,10 @@ if (!Array.prototype.includes) {
     });
 }
 
+declare global {
 interface ArrayConstructor {
     range(start: number, end: number): number[];
+}
 }
 
 Array.range = (start: number, end: number) => Array.from({ length: (end - start + 1) }, (v, k) => k + start);
@@ -167,3 +152,5 @@ Array.range = (start: number, end: number) => Array.from({ length: (end - start 
 //         }, []);
 //     }
 // });
+
+export {};

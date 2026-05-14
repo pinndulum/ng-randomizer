@@ -1,39 +1,37 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { PiProgress, PiService } from 'src/app/services/pi.service';
+import { PiProgress, PiService } from '@app/services/pi.service';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
     selector: 'app-pi',
     templateUrl: './pi.component.html',
-    styleUrls: ['./pi.component.scss']
+    styleUrls: ['./pi.component.scss'],
+    imports: [AsyncPipe, DecimalPipe]
 })
-export class PiComponent implements OnInit, AfterViewInit {
+export class PiComponent implements AfterViewInit {
+    private pi = inject(PiService);
 
-    public precision = 900;
-    public readonly progress?: Observable<PiProgress>;
 
-    constructor(
-        private pi: PiService
-    ) {
+    protected precision = 900;
+    protected readonly progress?: Observable<PiProgress>;
+
+    constructor() {
         this.progress = this.pi.progress().pipe(
             concatMap(x => of(x).pipe(delay(0))),
             tap(x => {
-                console.log('pi progress:', { ...x });                    
+                console.log('pi progress:', { ...x });
             })
         );
     }
 
-    ngOnInit(): void {
-    }
-
     ngAfterViewInit(): void {
         setTimeout(() => {
-            this.pi.calculate(this.precision).subscribe();            
+            this.pi.calculate(this.precision).subscribe();
         }, 300);
     }
 
-    superlative = () =>
+    protected readonly superlative = () =>
         this.precision > 5000 ? 'staggering' : 'modest';
 }

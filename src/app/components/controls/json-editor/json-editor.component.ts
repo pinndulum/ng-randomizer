@@ -1,30 +1,39 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, effect, inject, input, model, output, viewChild } from '@angular/core';
 import type JSONEditor from 'jsoneditor';
 import type { JSONEditorMode, JSONEditorOptions } from 'jsoneditor';
 
 @Component({
-  standalone: false,
-  selector: 'app-json-editor',
-  templateUrl: './json-editor.component.html',
-  styleUrls: ['./json-editor.component.scss']
+    selector: 'app-json-editor',
+    templateUrl: './json-editor.component.html',
+    styleUrls: ['./json-editor.component.scss']
 })
-export class JsonEditorComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class JsonEditorComponent implements AfterViewInit, OnDestroy {
+  private readonly zone = inject(NgZone);
 
-  @Input() data: unknown = {};
-  @Input() mode: JSONEditorMode = 'text';
-  @Input() modes: JSONEditorMode[] = ['tree', 'text', 'view'];
-  @Input() indentation = 2;
 
-  @Output() dataChange = new EventEmitter<unknown>();
-  @Output() errorChange = new EventEmitter<string | null>();
+  public readonly data = model<unknown>({});
+  public readonly mode = input<JSONEditorMode>('text');
+  public readonly modes = input<JSONEditorMode[]>(['tree', 'text', 'view']);
+  public readonly indentation = input(2);
 
-  @ViewChild('host', { static: true }) private readonly host!: ElementRef<HTMLDivElement>;
+  public readonly errorChange = output<string | null>();
+
+  private readonly host = viewChild.required<ElementRef<HTMLDivElement>>('host');
 
   private editor?: JSONEditor;
   private destroyed = false;
   private latestText = '';
 
-  constructor(private readonly zone: NgZone) { }
+  constructor() {
+    effect(() => {
+      const data = this.data();
+      if (!this.editor) {
+        return;
+      }
+
+      this.zone.runOutsideAngular(() => this.updateEditor(data));
+    });
+  }
 
   async ngAfterViewInit(): Promise<void> {
     const { default: JSONEditorCtor } = await import('jsoneditor');
@@ -33,17 +42,10 @@ export class JsonEditorComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     this.zone.runOutsideAngular(() => {
-      this.latestText = this.stringify(this.data);
-      this.editor = new JSONEditorCtor(this.host.nativeElement, this.makeOptions(), this.data);
+      const data = this.data();
+      this.latestText = this.stringify(data);
+      this.editor = new JSONEditorCtor(this.host().nativeElement, this.makeOptions(), data);
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.editor || !changes['data']) {
-      return;
-    }
-
-    this.zone.runOutsideAngular(() => this.updateEditor(this.data));
   }
 
   ngOnDestroy(): void {
@@ -53,8 +55,8 @@ export class JsonEditorComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private makeOptions(): JSONEditorOptions {
     return {
-      mode: this.mode,
-      modes: this.modes,
+      mode: this.mode(),
+      modes: this.modes(),
       mainMenuBar: true,
       navigationBar: true,
       statusBar: true,
@@ -90,7 +92,7 @@ export class JsonEditorComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.latestText = this.stringify(value);
     this.zone.run(() => {
       this.errorChange.emit(null);
-      this.dataChange.emit(value);
+      this.data.set(value);
     });
   }
 
@@ -99,6 +101,6 @@ export class JsonEditorComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private stringify(value: unknown): string {
-    return JSON.stringify(value, null, this.indentation);
+    return JSON.stringify(value, null, this.indentation());
   }
 }

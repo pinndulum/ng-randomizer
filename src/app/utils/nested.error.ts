@@ -28,7 +28,7 @@ export class NestedError extends Error {
 
     private stackstr = (err: Error, prefix: string = '', pad: number = 0) => {
         const indent = (str: string) =>
-            str.split('\n').map(x => !!x ? ' '.repeat(this.indent + pad) + x : x).join('\n');
+            str.split('\n').map(x => x ? ' '.repeat(this.indent + pad) + x : x).join('\n');
         const stack = err.stack ?? `${err.name}: ${err.message}`;
         return indent(prefix) + indent(stack);
     };
@@ -39,7 +39,8 @@ export const toError = (err: unknown): Error => {
         return err;
     }
 
-    let [msg, inner]: [string, string?] = ['', undefined];
+    let msg: string;
+    let inner: string | undefined;
     switch (typeof err) {
         case 'string':
         case 'undefined':

@@ -1,23 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Gender, MockService, NameComponents } from 'src/app/services/mock.service';
-import dates from 'src/app/utils/dates';
+import { Gender, MockService, NameComponents, PseudoIdentity } from '@app/services/mock.service';
+import dates from '@app/utils/dates';
+import { RouterLink } from '@angular/router';
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
+import { AsyncPipe, JsonPipe, DecimalPipe } from '@angular/common';
+
+type PseudoIdentityTab = 'details' | 'contact' | 'secret';
 
 @Component({
-  standalone: false,
-  selector: 'app-pseudo-identity',
-  templateUrl: './pseudo-identity.component.html',
-  styleUrls: ['./pseudo-identity.component.scss']
+    selector: 'app-pseudo-identity',
+    templateUrl: './pseudo-identity.component.html',
+    styleUrls: ['./pseudo-identity.component.scss'],
+    imports: [RouterLink, CdkCopyToClipboard, AsyncPipe, JsonPipe, DecimalPipe]
 })
 export class PseudoIdentityComponent {
+  private mock = inject(MockService);
 
-  public loading = false;
-  public readonly ident$: Observable<any>;
 
-  private readonly ident: BehaviorSubject<any>;
+  protected loading = false;
+  protected activeTab: PseudoIdentityTab = 'details';
+  protected readonly ident$: Observable<PseudoIdentity>;
 
-  constructor(private mock: MockService) {
+  private readonly ident: BehaviorSubject<PseudoIdentity>;
+
+  constructor() {
     this.ident = new BehaviorSubject(this.mock.realistic.identity());
     this.ident$ = this.ident.pipe(
       tap(() => { this.loading = false; }),
@@ -25,12 +33,12 @@ export class PseudoIdentityComponent {
   }
 
 
-  load = (ident?: any) => {
+  protected readonly load = (ident?: PseudoIdentity) => {
     this.loading = true;
     this.ident.next(ident ?? this.mock.realistic.identity());
   };
 
-  recycle = (ident: any, key: string) => {
+  protected readonly recycle = (ident: PseudoIdentity, key: string) => {
     let gender = Gender[ident.gender as keyof typeof Gender];
     let state = ident.address.state;
     switch (key) {
@@ -44,23 +52,24 @@ export class PseudoIdentityComponent {
         gender = this.mock.realistic.names.gender();
         ident.gender = Gender[gender];
         ident.name = this.mock.realistic.names.name(NameComponents.Full, gender);
-        break
+        break;
       case 'name.first':
-        ident.name.first = this.mock.realistic.names.firstname(gender, ident.name.first);
+        ident.name.first = this.mock.realistic.names.firstname(gender, ident.name.first ?? '');
         break;
       case 'name.middle':
-        ident.name.middle = this.mock.realistic.names.middlename(gender, ident.name.middle);
+        ident.name.middle = this.mock.realistic.names.middlename(gender, ident.name.middle ?? '');
         break;
       case 'name.last':
-        ident.name.last = this.mock.realistic.names.lastname(ident.name.last);
+        ident.name.last = this.mock.realistic.names.lastname(ident.name.last ?? '');
         break;
-      case 'bio':
+      case 'bio': {
         let bio = ident.bio;
         while (bio === ident.bio) {
           bio = this.mock.realistic.typeset();
         }
         ident.bio = bio;
         break;
+      }
       case 'company':
         ident.company = this.mock.realistic.company();
         break;
@@ -98,15 +107,17 @@ export class PseudoIdentityComponent {
       case 'cc.card':
         ident.cc = this.mock.realistic.credit_card();
         break;
-      case 'cc.exp':
+      case 'cc.exp': {
         const year = dates.current.year();
         ident.cc.month = this.mock.random.int({min: 1, max: 12}, true);
         ident.cc.year = this.mock.random.int({ min: year + 1, max: year + 11 });
         break;
-      case 'cc.cvv':
+      }
+      case 'cc.cvv': {
         const ccdgt = ident.cc.card[0];
         ident.cc.cvv = this.mock.random.numeric(ccdgt === '3' ? 4 : 3);
         break;
+      }
     }
     this.load({ ...ident });
   };

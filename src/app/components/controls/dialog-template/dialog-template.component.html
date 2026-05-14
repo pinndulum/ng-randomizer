@@ -13,6 +13,6 @@
 }
 <div mat-dialog-actions>
   @for (button of buttons; track button) {
-    <button mat-button (click)="onPress(button)">{{button.title}}</button>
+    <button mat-button type="button" (click)="onPress(button)">{{button.title}}</button>
   }
 </div>

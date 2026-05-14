@@ -14,7 +14,7 @@
       <div class="col-xl-4">
         <div class="card">
           <div class="card-body pt-4">
-            <h5 class="card-title p-0 m-0" style="font-size: 16px;">Name</h5>
+            <h5 class="card-title p-0 m-0 fs-6">Name</h5>
             <div class="row mb-0">
               <label for="inputText" class="col-sm-3 col-form-label">
                 First:
@@ -73,25 +73,33 @@
       <div class="col-xl-8">
         <div class="card">
           <div class="card-body pt-3">
-            <ul class="nav nav-tabs nav-tabs-bordered">
+            <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
               <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ident-details">
+                <button class="nav-link" [class.active]="activeTab === 'details'" type="button" role="tab"
+                  id="ident-details-tab" aria-controls="ident-details"
+                  [attr.aria-selected]="activeTab === 'details'" (click)="activeTab = 'details'">
                   Details
                 </button>
               </li>
               <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ident-contact">
+                <button class="nav-link" [class.active]="activeTab === 'contact'" type="button" role="tab"
+                  id="ident-contact-tab" aria-controls="ident-contact"
+                  [attr.aria-selected]="activeTab === 'contact'" (click)="activeTab = 'contact'">
                   Contact Info
                 </button>
               </li>
               <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ident-secret">
-                  Private/Secrect
+                <button class="nav-link" [class.active]="activeTab === 'secret'" type="button" role="tab"
+                  id="ident-secret-tab" aria-controls="ident-secret"
+                  [attr.aria-selected]="activeTab === 'secret'" (click)="activeTab = 'secret'">
+                  Private/Secret
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-2">
-              <div class="tab-pane fade show active ident-details" id="ident-details">
+              <div class="tab-pane fade ident-details" id="ident-details" role="tabpanel"
+                aria-labelledby="ident-details-tab" [class.show]="activeTab === 'details'"
+                [class.active]="activeTab === 'details'" [hidden]="activeTab !== 'details'">
                 <div class="row mb-0">
                   <label for="ident_id" class="col-sm-3 col-form-label">
                     ID:
@@ -133,8 +141,8 @@
                       Bio:
                     </label>
                     <div class="form-floating mb-3">
-                      <textarea id="ident_bio" disabled class="form-control p-1"
-                        placeholder="Pseudo Bio" style="min-height: 100px;">{{ident.bio}}
+                      <textarea id="ident_bio" disabled class="form-control p-1 pseudo-bio"
+                        placeholder="Pseudo Bio">{{ident.bio}}
                       </textarea>
                       <button class="btn btn-primary sm_btn" type="button" [disabled]="loading"
                         (click)="recycle(ident, 'bio')">
@@ -155,7 +163,9 @@
                     </button>
                   </div>
                 </div>
-                <div class="tab-pane fade pt-3 ident-contact" id="ident-contact">
+                <div class="tab-pane fade pt-3 ident-contact" id="ident-contact" role="tabpanel"
+                  aria-labelledby="ident-contact-tab" [class.show]="activeTab === 'contact'"
+                  [class.active]="activeTab === 'contact'" [hidden]="activeTab !== 'contact'">
                   <div class="row mb-0">
                     <label for="inputText" class="col-sm-3 col-form-label">
                       Phone:
@@ -241,7 +251,9 @@
                     </button>
                   </div>
                 </div>
-                <div class="tab-pane fade pt-3 ident-secret" id="ident-secret">
+                <div class="tab-pane fade pt-3 ident-secret" id="ident-secret" role="tabpanel"
+                  aria-labelledby="ident-secret-tab" [class.show]="activeTab === 'secret'"
+                  [class.active]="activeTab === 'secret'" [hidden]="activeTab !== 'secret'">
                   <div class="row mb-0">
                     <label for="inputText" class="col-sm-3 col-form-label">
                       Password:
@@ -250,7 +262,7 @@
                       <input [type]="ident.show_pwd ? 'text' : 'password'" disabled class="form-control" [value]="ident.pwd">
                     </div>
                     <button type="button" class="btn btn-secondary sm_btn" (click)="ident.show_pwd = !ident.show_pwd">
-                      <i class="bi " [ngClass]="ident.show_pwd ? 'bi-eye-slash' : 'bi-eye'"></i>
+                      <i [class]="ident.show_pwd ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                     </button>
                     <button class="btn btn-primary sm_btn" type="button" [disabled]="loading" (click)="recycle(ident, 'pwd')">
                       <i class="bi bi-recycle"></i>

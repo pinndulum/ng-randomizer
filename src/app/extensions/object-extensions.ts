@@ -1,9 +1,11 @@
 /* eslint-disable object-shorthand */
 
+declare global {
 interface Object {
     isEmptyObj(): boolean;
     isBool(): boolean;
     isNum(): boolean;
+}
 }
 
 Object.defineProperty(Object.prototype, 'isEmptyObj', {
@@ -24,3 +26,5 @@ Object.defineProperty(Object.prototype, 'isNum', {
         return !isNaN(Number(this || 'NaN'));
     }
 });
+
+export {};

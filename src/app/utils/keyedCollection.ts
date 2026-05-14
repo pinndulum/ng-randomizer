@@ -22,7 +22,7 @@ export class KeyedCollection<T> implements IKeyedCollection<T> {
     public values = (): T[] => Object.values(this.items);
     public count = (): number => this.keys().length;
     public keyDefined = (key: string): boolean => !!this.items[key];
-    public containsKey = (key: string): boolean => this.items.hasOwnProperty(key);
+    public containsKey = (key: string): boolean => Object.hasOwn(this.items, key);
 
     public add = (key: string, value: T): T => {
         if (key?.length) {

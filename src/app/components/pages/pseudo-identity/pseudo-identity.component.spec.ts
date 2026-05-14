@@ -1,5 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { PseudoIdentityComponent } from './pseudo-identity.component';
 
@@ -9,10 +10,10 @@ describe('PseudoIdentityComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PseudoIdentityComponent],
-      imports: [ClipboardModule]
+      imports: [ClipboardModule, PseudoIdentityComponent],
+      providers: [provideRouter([])]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PseudoIdentityComponent);
     component = fixture.componentInstance;

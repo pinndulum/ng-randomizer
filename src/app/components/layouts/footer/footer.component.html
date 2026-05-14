@@ -25,6 +25,7 @@
     </a>
   </div>
 </footer>
-<a (click)="scrollTop()" class="back-to-top d-flex align-items-center justify-content-center">
+<button type="button" (click)="scrollTop()" [class.active]="showBackToTop()"
+  class="back-to-top d-flex align-items-center justify-content-center" aria-label="Back to top">
   <i class="bi bi-arrow-up-short"></i>
-</a>
+</button>

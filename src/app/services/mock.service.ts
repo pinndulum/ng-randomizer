@@ -12,6 +12,37 @@ import dates from '../utils/dates';
 
 export { Gender, Name, NameComponents, NumericRange };
 
+export interface CreditCardIdentity {
+  card: string;
+  month: number;
+  year: number;
+  cvv: string;
+}
+
+export interface IdentityAddress {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  tz: string;
+}
+
+export interface PseudoIdentity {
+  id: string;
+  created: Date;
+  gender: string;
+  name: Name;
+  ssn: string;
+  cc: CreditCardIdentity;
+  phone: string;
+  email: string;
+  bio: string;
+  address: IdentityAddress;
+  company: string;
+  pwd: string;
+  show_pwd?: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MockService {
 
@@ -67,19 +98,19 @@ export class MockService {
       };
       return `${area}-${grp}-${serial}`;
     },
-    credit_card: () => {
+    credit_card: (): CreditCardIdentity => {
       const year = dates.current.year();
       const ccdgt = this.random.int({ min: 3, max: 6 }, true);
       const ccfmt = ccdgt === 3 ? 'xxx-xxxxxx-xxxx' : 'xxx-xxxx-xxxx-xxx';
       const luhnlen = ccfmt.replace(/-/g, '').length + 1;
-      return this.complex.object({
+      return this.complex.object<CreditCardIdentity>({
         card: { $mock: 'luhn', length: luhnlen, format: `${ccdgt}${ccfmt}` },
         month: { $mock: 'number', min: 1, max: 12, inclusive: true },
         year: { $mock: 'number', min: year + 1, max: year + 11 },
         cvv: { $mock: 'numstring', length: ccdgt === 3 ? 4 : 3 }
       });
     },
-    identity: (gender?: Gender) => {
+    identity: (gender?: Gender): PseudoIdentity => {
       gender = gender ?? this.realistic.names.gender();
       const state = this.realistic.state();
       return {

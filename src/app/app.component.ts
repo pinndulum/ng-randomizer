@@ -1,41 +1,45 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, Location } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialogState } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { debounceTime, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FooterComponent } from './components/layouts/footer/footer.component';
+import { HeaderComponent } from './components/layouts/header/header.component';
+import { SidebarComponent } from './components/layouts/sidebar/sidebar.component';
 import { AppConfig } from './interfaces/app-config.interface';
 import { AlertService } from './services/alert.service';
 import { LoadingService } from './services/loading.service';
 import { PrefsService } from './services/prefs.service';
 
 @Component({
-  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [
+    MatProgressSpinnerModule,
+    HeaderComponent,
+    SidebarComponent,
+    RouterOutlet,
+    FooterComponent,
+    AsyncPipe
+  ]
 })
 export class AppComponent implements OnInit {
+  private readonly loc = inject(Location);
+  private readonly cfg = inject(AppConfig);
+  private readonly prefs = inject(PrefsService);
+  private readonly alert = inject(AlertService);
+  private readonly loading = inject(LoadingService);
+  private readonly route = inject(ActivatedRoute);
 
-  public readonly title = 'Randomizer';
-  public readonly theme$: Observable<string>;
-  public readonly loading$: Observable<boolean>;
-
-  constructor(
-    private loc: Location,
-    private cfg: AppConfig,
-    private prefs: PrefsService,
-    private alert: AlertService,
-    private loading: LoadingService,
-    private route: ActivatedRoute
-  ) {
-    this.theme$ = this.prefs.theme$.pipe(
-      map(theme => `rand-${theme}-theme`)
-    );
-    this.loading$ = this.loading.loadingSub.pipe(
-      debounceTime(300)
-    );
-  }
+  protected readonly theme$: Observable<string> = this.prefs.theme$.pipe(
+    map(theme => `rand-${theme}-theme`)
+  );
+  protected readonly loading$: Observable<boolean> = this.loading.loadingSub.pipe(
+    debounceTime(300)
+  );
 
   ngOnInit(): void {
     this.loc.onUrlChange((url, state) => {
@@ -45,7 +49,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  componentActive = async (component: Component): Promise<void> => {
+  protected readonly componentActive = (component: Component): void => {
     if (this.cfg.env !== 'production') {
       console.log('component active:', {
         component: component.constructor.name

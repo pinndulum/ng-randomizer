@@ -1,31 +1,33 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { from, Observable, of, Subject } from 'rxjs';
 import { concatMap, delay, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { MockService } from 'src/app/services/mock.service';
+import { MockService } from '@app/services/mock.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
 
 const coin_sides = ['heads', 'tails'] as const;
 type side = typeof coin_sides[number];
 
 @Component({
-  standalone: false,
-  selector: 'app-flip-a-coin',
-  templateUrl: './flip-a-coin.component.html',
-  styleUrls: ['./flip-a-coin.component.scss']
+    selector: 'app-flip-a-coin',
+    templateUrl: './flip-a-coin.component.html',
+    styleUrls: ['./flip-a-coin.component.scss'],
+    imports: [RouterLink, MatTooltip, AsyncPipe, DecimalPipe, DatePipe]
 })
 export class FlipACoinComponent implements AfterViewInit {
+  private mock = inject(MockService);
+  private route = inject(ActivatedRoute);
 
-  public flipping = false;
-  public readonly flip$: Observable<side>;
-  public readonly results: { dt: Date; side: side; spins: number; }[] = [];
+
+  protected flipping = false;
+  protected readonly flip$: Observable<side>;
+  protected readonly results: { dt: Date; side: side; spins: number; }[] = [];
 
   private range!: { min: number; max: number; inclusive: boolean; };
   private readonly spins_sub: Subject<number> = new Subject();
 
-  constructor(
-    private mock: MockService,
-    private route: ActivatedRoute
-  ) {
+  constructor() {
     this.flip$ = this.spins_sub.pipe(
       switchMap<number, Observable<[number, side]>>(spins => of([
         spins, this.mock.realistic.from([...coin_sides])
@@ -55,12 +57,12 @@ export class FlipACoinComponent implements AfterViewInit {
     this.flip();
   }
 
-  flip = () => {
+  protected readonly flip = () => {
     const { min, max, inclusive } = this.range;
     this.spins_sub.next(this.mock.random.int({ min, max }, inclusive));
   };
 
-  sum = () => {
+  protected readonly sum = () => {
     const sides = this.results.reduce((sum, cur) => {
       sum.heads += cur.side === 'heads' ? 1 : 0;
       sum.tails += cur.side === 'tails' ? 1 : 0;
@@ -70,7 +72,7 @@ export class FlipACoinComponent implements AfterViewInit {
     return { ...sides, spins };
   };
 
-  avg = (side: side | 'spins') => {
+  protected readonly avg = (side: side | 'spins') => {
     const [sum, count] = [this.sum(), this.results.length];
     switch (side) {
       case 'heads':

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-// import * as moment from 'moment';
 import { Subject, Observable, of, forkJoin, NEVER } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { ndx_sig_of } from '../interfaces/index-signature-of-t.interface';
@@ -56,26 +55,16 @@ export class PiService {
             };
         };
 
-		// const ts = Date.now();
-		// let dur = moment.duration();
-		// const refresh_time = () => {
-		// 	const ms = Date.now() - ts;
-		// 	dur = dur.add(ms);
-		// };
-
 		let tot = Math.trunc(len / 9);
         if (len % 9 > 0) {
             tot++;
         }
 		return forkJoin(Array.range(0, tot).map(x => of(x).pipe(
-			// tap(() => refresh_time()),
 			switchMap(ndx => {
-				// const ms = Date.now() - ts;
 				const digitN = (ndx * 9) + 1;
 				return of(Pi.CalcDigits(digitN)).pipe(
-					// tap(() => refresh_time()),
 					map(str => {
-						const nfo = { 
+						const nfo = {
 							len, ndx, tot, str, grp, sep
 						};
 						return update(nfo);
@@ -96,7 +85,9 @@ class Pi {
 
 	//* return the inverse of x mod y
 	static InvMod = (x: number, y: number): number => {
-		let [q, u, v, a, c, t] = [0, x, y, 0, 1, 0];
+		let [u, v, a, c] = [x, y, 0, 1];
+		let q: number;
+		let t: number;
 		do {
 			q = Math.trunc(v / u);
 			t = c;
@@ -142,7 +133,7 @@ class Pi {
 		}
 		return true;
 	}
-	
+
 	//* return the prime number immediatly following n
 	static NextPrime = (n: number): number => {
 		do {
@@ -150,7 +141,7 @@ class Pi {
 		} while (!Pi.IsPrime(n));
 		return n;
 	}
-	
+
 	// Put a separator between grouped digits
 	static GroupDigits = (digits: string, grp?: number, sep: string = ''): string => {
 		grp = grp ?? 0;
@@ -168,7 +159,13 @@ class Pi {
 
     static CalcDigits = (n: number): string => {
 		const N = Math.trunc((n + 20) * Math.log(10) / Math.log(2));
-		let [av, vmax, num, den, s, t, sum] = [0, 0, 0, 0, 0, 0, 0];
+		let sum = 0;
+		let av: number;
+		let vmax: number;
+		let num: number;
+		let den: number;
+		let s: number;
+		let t: number;
 		for(let a = 3; a <= 2*N; a = Pi.NextPrime(a)) {
 			av = 1;
 			vmax = Math.trunc(Math.log(2*N) / Math.log(a));

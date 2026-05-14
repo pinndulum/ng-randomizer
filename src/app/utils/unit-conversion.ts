@@ -1,5 +1,3 @@
-import { ndx_sig_of } from "../interfaces/index-signature-of-t.interface";
-
 export type distanceUnit =
     'meters' |
     'feet' |
@@ -20,15 +18,22 @@ export interface UnitMeasurement {
     measurement: number;
 }
 
-export const isDistanceUnit = (object: any): object is distanceUnit => {
-    const units = ['meters', 'feet'];
-    return !!object && units.every(x => object.hasOwnProperty(x) && !!object[x]);
-}
+const distanceUnits: readonly distanceUnit[] = ['meters', 'feet', 'kilometers', 'miles', 'yards'];
+const areaUnits: readonly areaUnit[] = [
+    'acres',
+    'hectares',
+    'square-feet',
+    'square-meters',
+    'square-yards',
+    'square-kilometers',
+    'square-miles'
+];
 
-export const isAreaUnit = (object: any): object is areaUnit => {
-    const units = ['acres', 'hectares'];
-    return !!object && units.every(x => object.hasOwnProperty(x) && !!object[x]);
-}
+export const isDistanceUnit = (object: unknown): object is distanceUnit =>
+    typeof object === 'string' && distanceUnits.includes(object as distanceUnit);
+
+export const isAreaUnit = (object: unknown): object is areaUnit =>
+    typeof object === 'string' && areaUnits.includes(object as areaUnit);
 
 /**
  * returns an array of the converted quantity and toUnit (in that order). Throws an error is either of the specified units isn't supported
@@ -38,7 +43,7 @@ export const isAreaUnit = (object: any): object is areaUnit => {
  * @param toUnit - Length unit being converted TO
  */
 export const convertLengths = (measurement: number, fromUnit: distanceUnit, toUnit: distanceUnit): [number, string] => {
-    const factors = {
+    const factors: Record<distanceUnit, number> = {
         meters: 1,
         feet: .3048,
         kilometers: 10 ** 3,
@@ -46,7 +51,7 @@ export const convertLengths = (measurement: number, fromUnit: distanceUnit, toUn
         yards: .9144
     };
 
-    if (factors.hasOwnProperty(fromUnit) && factors.hasOwnProperty(toUnit)) {
+    if (Object.hasOwn(factors, fromUnit) && Object.hasOwn(factors, toUnit)) {
         measurement = measurement * factors[fromUnit] / factors[toUnit];
         return [measurement, toUnit];
     } else {
@@ -62,7 +67,7 @@ export const convertLengths = (measurement: number, fromUnit: distanceUnit, toUn
  * @param toUnit - Area unit being converted TO
  */
 export const convertAreas = (measurement: number, fromUnit: areaUnit, toUnit: areaUnit): [number, string] => {
-    const factors = {
+    const factors: Record<areaUnit, number> = {
         acres: 4046.86,
         hectares: 10 ** 4,
         'square-feet': .0929,
@@ -72,7 +77,7 @@ export const convertAreas = (measurement: number, fromUnit: areaUnit, toUnit: ar
         'square-miles': 2589988.1
     };
 
-    if (factors.hasOwnProperty(fromUnit) && factors.hasOwnProperty(toUnit)) {
+    if (Object.hasOwn(factors, fromUnit) && Object.hasOwn(factors, toUnit)) {
         measurement = measurement * factors[fromUnit] / factors[toUnit];
         return [measurement, toUnit];
     } else {

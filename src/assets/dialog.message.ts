@@ -1,4 +1,4 @@
-import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
+import { ndx_sig_of } from '@app/interfaces/index-signature-of-t.interface';
 
 export class DialogModel {
     public readonly opts?: {

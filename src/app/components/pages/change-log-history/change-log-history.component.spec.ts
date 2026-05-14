@@ -1,6 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { provideRouter } from '@angular/router';
 
 import { ChangeLogHistoryComponent } from './change-log-history.component';
 
@@ -10,10 +11,10 @@ describe('ChangeLogHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChangeLogHistoryComponent],
-      imports: [ClipboardModule, MatTooltipModule]
+      imports: [ClipboardModule, MatTooltipModule, ChangeLogHistoryComponent],
+      providers: [provideRouter([])]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ChangeLogHistoryComponent);
     component = fixture.componentInstance;

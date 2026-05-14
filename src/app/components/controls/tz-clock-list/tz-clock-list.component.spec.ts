@@ -9,8 +9,8 @@ describe('TzClockListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TzClockComponent, TzClockListComponent]
-    })
+    imports: [TzClockComponent, TzClockListComponent]
+})
       .compileComponents();
   });
 

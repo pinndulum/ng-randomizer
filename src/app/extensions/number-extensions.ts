@@ -1,10 +1,10 @@
-/* eslint-disable id-blacklist */
 /* eslint-disable object-shorthand */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
+declare global {
 interface Number {
     padZero(length: number): string;
     between(a: number, b: number): boolean;
+}
 }
 
 Object.defineProperty(Number.prototype, 'padZero', {
@@ -22,3 +22,5 @@ Object.defineProperty(Number.prototype, 'between', {
         return this > min && this < max;
     }
 });
+
+export {};

@@ -1,11 +1,14 @@
-import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { AppConfig, IAppConfig } from './app/interfaces/app-config.interface';
+import { routes } from './app/routing/routes';
 import { NestedError } from './app/utils/nested.error';
 import { environment as env } from './environments/environment';
+import { AppComponent } from './app/app.component';
 
-const fetch_cfg = async (): Promise<IAppConfig> => {
+const fetchConfig = async (): Promise<IAppConfig> => {
   let envname = 'deploy';
   if (env.name.match(/dev(:elop(:ment)?)?/gi)) {
     envname = 'dev';
@@ -28,10 +31,14 @@ if (env.name === 'deploy') {
   enableProdMode();
 }
 
-fetch_cfg().then(x => {
-  const cfg = new AppConfig(x);
-  platformBrowserDynamic([
-    { provide: AppConfig, useValue: cfg }
-  ]).bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], })
+fetchConfig().then(config => {
+  const appConfig = new AppConfig(config);
+  bootstrapApplication(AppComponent, {
+    providers: [
+      { provide: AppConfig, useValue: appConfig },
+      provideRouter(routes),
+      importProvidersFrom(BrowserAnimationsModule)
+    ]
+  })
     .catch(err => console.error(err));
 });

@@ -13,25 +13,25 @@
     <div class="col-xl-10">
       <div class="card">
         <div class="card-body pt-3">
-          <h5 class="card-title" style="font-size: 16px;">Change Logs</h5>
+          <h5 class="card-title fs-6">Change Logs</h5>
           @if (change_history$ | async; as history;) {
             <div class="row">
               <div class="col">
                 @if (pg.pages.length) {
                   <ul class="pagination">
-                    <li class="page-item " [ngClass]="pg.current === 0 ? 'disabled' : ''">
+                    <li class="page-item" [class.disabled]="pg.current === 0">
                       <a class="page-link" (click)="pg.prev()">
                         <i class="bi bi-chevron-left"></i>
                       </a>
                     </li>
                     @for (page of pg.pages; track page) {
-                      <li class="page-item " [ngClass]="page === pg.current ? 'active' : ''">
+                      <li class="page-item" [class.active]="page === pg.current">
                         <a class="page-link" (click)="pg.goto(page)">
                           {{page + 1}}
                         </a>
                       </li>
                     }
-                    <li class="page-item "[ngClass]="pg.pages.length - 1 > pg.current ? '' : 'disabled'" >
+                    <li class="page-item" [class.disabled]="pg.pages.length - 1 <= pg.current">
                       <a class="page-link" (click)="pg.next()">
                         <i class="bi bi-chevron-right"></i>
                       </a>
@@ -65,14 +65,16 @@
                     <td>
                       @for (data of item.Data; track data) {
                         <div class="pb-1">
-                          <button class="btn btn-primary sm_btn me-2" type="button" data-bs-toggle="modal"
-                            [attr.data-bs-target]="'#details_' + data.Id" [matTooltip]="data.Id">
+                          <button class="btn btn-primary sm_btn me-2" type="button"
+                            (click)="detailDialog.showModal()" [matTooltip]="data.Id">
                             <i class="bi bi-binoculars"></i>
                           </button>
-                          <i class="bi " [ngClass]="change_type_icon(data.ChangeType)"></i>
+                          <i [class]="'bi ' + change_type_icon(data.ChangeType)"></i>
                           {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
-                          <ng-template [ngTemplateOutlet]="detail_modal" [ngTemplateOutletContext]="{data: data}">
-                          </ng-template>
+                          <dialog #detailDialog class="change-detail-dialog">
+                            <ng-template [ngTemplateOutlet]="detail_modal"
+                              [ngTemplateOutletContext]="{data: data, dialog: detailDialog}" />
+                          </dialog>
                         </div>
                       }
                     </td>
@@ -87,48 +89,42 @@
   </div>
 </section>
 
-<ng-template #detail_modal let-data="data">
-  <div class="modal fade" [id]="'details_' + data.Id" tabindex="-1">
-    <div class="modal-dialog" style="max-width: 900px;">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" style="font-size: 16px;">
-            Change Log Details-&gt; {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
+<ng-template #detail_modal let-data="data" let-dialog="dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title fs-6">
+        Change Log Details-&gt; {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
+      </h5>
+      <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      @if (data.CurrValue) {
+        <div class="col-md-10 mb-4">
+          <h5 class="modal-title mb-0 fs-6 fw-bold">
+            Current Value
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.CurrValue}" />
         </div>
-        <div class="modal-body">
-          @if (data.CurrValue) {
-            <div class="col-md-10 mb-4">
-              <h5 class="modal-title mb-0" style="font-size: 16px; font-weight: bold;">
-                Current Value
-              </h5>
-              <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.CurrValue}">
-              </ng-template>
-            </div>
-          }
-          @if (data.PrevValue) {
-            <div class="col-md-10 mb-4">
-              <h5 class="modal-title mb-0" style="font-size: 16px; font-weight: bold;">
-                Previous Value
-              </h5>
-              <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.PrevValue}">
-              </ng-template>
-            </div>
-          }
+      }
+      @if (data.PrevValue) {
+        <div class="col-md-10 mb-4">
+          <h5 class="modal-title mb-0 fs-6 fw-bold">
+            Previous Value
+          </h5>
+          <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.PrevValue}" />
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
-        </div>
-      </div>
+      }
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="dialog.close()">
+        Close
+      </button>
     </div>
   </div>
 </ng-template>
 
 <ng-template #detail_table let-value="value">
-  <table style="width: 100%">
+  <table class="detail-table">
     <thead>
       <th>Version</th>
       <th>Created By</th>

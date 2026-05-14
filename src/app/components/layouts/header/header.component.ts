@@ -1,24 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  standalone: false,
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    imports: [RouterLink],
 })
 export class HeaderComponent implements OnInit  {
-
-  constructor (
-  ) {
-  }
-
   ngOnInit (): void {
     if (sessionStorage.getItem('toggle-sidebar') === 'true') {
       this.sidebarToggle();
     }
   }
 
-  sidebarToggle = () => {
+  protected readonly sidebarToggle = () => {
     const classes = window.document.body.classList;
     classes.toggle('toggle-sidebar');
     sessionStorage.removeItem('toggle-sidebar');

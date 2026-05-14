@@ -1,24 +1,13 @@
-import { Location } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { SIDEBAR_NAV_ITEMS } from '@app/routing/route-paths';
 
 @Component({
-  standalone: false,
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
+    imports: [RouterLink]
 })
-export class SidebarComponent implements OnInit {
-
-  @ViewChild('rpt_item') private readonly rpt_item!: ElementRef<HTMLLIElement>;
-
-  needsauth: Observable<boolean> = EMPTY;
-
-  constructor (
-    private loc: Location
-  ) {
-  }
-
-  async ngOnInit (): Promise<void> {
-  }
+export class SidebarComponent {
+  protected readonly navItems = SIDEBAR_NAV_ITEMS;
 }

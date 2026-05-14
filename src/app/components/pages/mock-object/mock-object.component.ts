@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
-import { ndx_sig_of } from 'src/app/interfaces/index-signature-of-t.interface';
-import { MockService } from 'src/app/services/mock.service';
+import { Component, inject } from '@angular/core';
+import { ndx_sig_of } from '@app/interfaces/index-signature-of-t.interface';
+import { MockService } from '@app/services/mock.service';
+import { RouterLink } from '@angular/router';
+import { JsonEditorComponent } from '../../controls/json-editor/json-editor.component';
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
+import { JsonPipe } from '@angular/common';
 
 interface EditorObj {
     data: ndx_sig_of<unknown>;
@@ -9,16 +13,18 @@ interface EditorObj {
 }
 
 @Component({
-  standalone: false,
-  selector: 'app-mock-object',
-  templateUrl: './mock-object.component.html',
-  styleUrls: ['./mock-object.component.scss']
+    selector: 'app-mock-object',
+    templateUrl: './mock-object.component.html',
+    styleUrls: ['./mock-object.component.scss'],
+    imports: [RouterLink, JsonEditorComponent, CdkCopyToClipboard, JsonPipe]
 })
 export class MockObjectComponent {
+  private mock = inject(MockService);
 
-  public readonly editobj: EditorObj;
 
-  constructor (private mock: MockService) {
+  protected readonly editobj: EditorObj;
+
+  constructor () {
     this.editobj = {
       data: {
         Id: { $mock: 'guid' },
@@ -62,16 +68,16 @@ export class MockObjectComponent {
     this.mockdata();
   }
 
-  public readonly templateChanged = (value: unknown) => {
+  protected readonly templateChanged = (value: unknown) => {
     this.editobj.data = value as ndx_sig_of<unknown>;
     this.editobj.error = null;
   };
 
-  public readonly templateErrorChanged = (message: string | null) => {
+  protected readonly templateErrorChanged = (message: string | null) => {
     this.editobj.error = message;
   };
 
-  public mockdata = () => {
+  protected readonly mockdata = () => {
     if (this.editobj.error) {
       return;
     }

@@ -145,7 +145,7 @@ export const addMinutes = (date: Date, minutes: number, seconds?: number, ms?: n
 export const addSeconds = (date: Date, seconds: number, ms?: number): Date => addMinutes(date, 0, seconds, ms);
 export const addMilSeconds = (date: Date, ms: number): Date => addSeconds(date, 0, ms);
 
-// eslint-disable-next-line @typescript-eslint/no-shadow
+
 export const addYears = (date: Date, years: number, months?: number, days?: number): Date => {
     const result = new Date(date);
     result.setFullYear(
@@ -155,7 +155,7 @@ export const addYears = (date: Date, years: number, months?: number, days?: numb
     );
     return result;
 };
-// eslint-disable-next-line @typescript-eslint/no-shadow
+
 export const addMonths = (date: Date, months: number, days?: number): Date => addYears(date, 0, months, days);
 export const addDays = (date: Date, days: number): Date => addMonths(date, 0, days);
 

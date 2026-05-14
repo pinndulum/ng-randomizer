@@ -1,51 +1,54 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-import { MockService } from 'src/app/services/mock.service';
+import { MockService } from '@app/services/mock.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
+import { ROUTE_LINKS } from '@app/routing/route-paths';
 
 const utter = SpeechSynthesisUtterance;
 
 @Component({
-  standalone: false,
-  selector: 'app-shakespeare-insults',
-  templateUrl: './shakespeare-insults.component.html',
-  styleUrls: ['./shakespeare-insults.component.scss']
+    selector: 'app-shakespeare-insults',
+    templateUrl: './shakespeare-insults.component.html',
+    styleUrls: ['./shakespeare-insults.component.scss'],
+    imports: [RouterLink, MatTooltip, AsyncPipe]
 })
 export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
+  private rtr = inject(Router);
+  private rte = inject(ActivatedRoute);
+  private mock = inject(MockService);
 
-  public readonly word_lists = insults;
-  public readonly synth?: SpeechSynthesis;
-  public readonly insults$: Observable<string>;
+
+  protected readonly word_lists = insults;
+  protected readonly synth?: SpeechSynthesis;
+  protected readonly insults$: Observable<string>;
 
   private readonly word_sub: Subject<string> = new Subject();
-  
-  constructor(
-    private rtr: Router,
-    private rte: ActivatedRoute,
-    private mock: MockService
-  ) {
+
+  constructor() {
     this.synth = speechSynthesis;
     this.insults$ = this.word_sub.pipe(
       delay(0)
     );
   }
-  
+
   ngOnInit(): void {
     this.rte.queryParamMap.pipe(
       tap(params => {
         this.load_query(params);
-      }) 
+      })
     ).subscribe();
   }
-  
+
   ngAfterViewInit(): void {
     this.load_query(
       new URLSearchParams(location.search)
     );
   }
 
-  load = (x?: number, y?: number, z?: number) => {
+  protected readonly load = (x?: number, y?: number, z?: number) => {
     const words: string[] = [];
     [x, y, z].forEach((n, i) => {
       let word = insults[i][Number(n)];
@@ -55,12 +58,12 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
       words.push(word);
     });
     this.word_sub.next(words.join(' '));
-    
+
     const params = new URLSearchParams(location.search);
     ['x', 'y', 'z'].forEach((n, i) => {
       params.set(n, insults[i].indexOf(words[i]).toString());
     });
-    this.rtr.navigate(['/random/shakespeare-insults'], {
+    this.rtr.navigate([ROUTE_LINKS.shakespeareInsults], {
       replaceUrl: !location.search,
       queryParams: {
         ...Array.from(params.entries())
@@ -71,14 +74,14 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
     });
   };
 
-  sayit = async (text?: string, voice?: number) => {
+  protected readonly sayit = async (text?: string, voice?: number) => {
     const synth = this.synth;
     if (!synth || !text) {
       return;
     }
 
     let voices = synth.getVoices();
-    if (!voices.length) {    
+    if (!voices.length) {
       await new Promise(resolve =>
         synth.onvoiceschanged = resolve
       );
