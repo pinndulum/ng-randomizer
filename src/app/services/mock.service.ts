@@ -7,10 +7,12 @@ import { Random as random } from '@joxnathan/mock-randomizer/lib/random';
 import { Realistic as realistic } from '@joxnathan/mock-randomizer/lib/realistic';
 import { Gender, Name, NameComponents } from '@joxnathan/mock-randomizer/lib/name.generator';
 import { NumericRange } from '@joxnathan/mock-randomizer/lib/numeric.range';
+import clock, { type ClockInput } from '@joxnathan/mock-randomizer/lib/utils/date.util';
 import { ndx_sig_of } from '../interfaces/index-signature-of-t.interface';
 import dates from '../utils/dates';
 
 export { Gender, Name, NameComponents, NumericRange };
+export type { ClockInput };
 
 export interface CreditCardIdentity {
   card: string;
@@ -61,6 +63,11 @@ export class MockService {
     date: (start?: Date, end?: Date) => random.nextDate(start, end),
     numeric: (size?: number, format?: string) => random.nextNumericString(size, format),
     string: (size?: number, cased?: 'upper' | 'lower' | 'mixed', format?: string) => random.nextString(size, cased, format),
+    withSeed: <T>(seed: string | number, fn: () => T) => random.withSeed(seed, fn)
+  };
+
+  clock = {
+    withClock: <T>(value: ClockInput, fn: () => T) => clock.withClock(value, fn)
   };
 
   realistic = {
@@ -111,7 +118,7 @@ export class MockService {
       });
     },
     identity: (gender?: Gender): PseudoIdentity => {
-      gender = gender ?? this.realistic.names.gender();
+      gender ??= this.realistic.names.gender();
       const state = this.realistic.state();
       return {
         id: this.random.guid(),

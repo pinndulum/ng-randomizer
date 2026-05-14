@@ -1,0 +1,114 @@
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.clock-card {
+    background: #ffffff;
+    border: 1px solid #dbe4f0;
+    border-left: 0.35rem solid #20c997;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.45rem 1rem rgba(1, 41, 112, 0.08);
+    display: grid;
+    gap: 0.75rem;
+    height: 100%;
+    min-width: 0;
+    padding: 1rem;
+}
+
+.clock-card-night {
+    border-left-color: #6f42c1;
+}
+
+.clock-card-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    min-width: 0;
+}
+
+.clock-location {
+    color: #6c757d;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 0.25rem;
+    text-transform: uppercase;
+}
+
+.clock-card h2 {
+    color: #012970;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.clock-badge {
+    background: #f8fafc;
+    border: 1px solid #dbe4f0;
+    border-radius: 999px;
+    color: #012970;
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.4rem 0.55rem;
+}
+
+.clock-time {
+    color: #1f2937;
+    font-size: clamp(1.65rem, 5vw, 2.25rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.clock-date {
+    color: #5f6f85;
+    font-size: 0.95rem;
+}
+
+.clock-meta {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+}
+
+.clock-meta div {
+    background: #f8fafc;
+    border: 1px solid #e9eef5;
+    border-radius: 0.375rem;
+    min-width: 0;
+    padding: 0.6rem;
+}
+
+.clock-meta dt {
+    color: #6c757d;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.clock-meta dd {
+    color: #1f2937;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 575px) {
+    .clock-card {
+        gap: 0.7rem;
+        padding: 0.875rem;
+    }
+
+    .clock-meta {
+        grid-template-columns: 1fr;
+    }
+}

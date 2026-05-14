@@ -2,10 +2,11 @@ import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-import { MockService } from '@app/services/mock.service';
+import { MockService } from '../../../services/mock.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AsyncPipe } from '@angular/common';
-import { ROUTE_LINKS } from '@app/routing/route-paths';
+import { ROUTE_LINKS } from '../../../routing/route-paths';
+import { AlertService } from '../../../services/alert.service';
 
 const utter = SpeechSynthesisUtterance;
 
@@ -19,6 +20,7 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
   private rtr = inject(Router);
   private rte = inject(ActivatedRoute);
   private mock = inject(MockService);
+  private alert = inject(AlertService);
 
 
   protected readonly word_lists = insults;
@@ -99,6 +101,21 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
       synth.cancel();
     }
     synth.speak(speech);
+  };
+
+  protected readonly showSourceImageDialog = (): void => {
+    void this.alert.showDialog({
+      title: 'Original Shakespeare Insult Kit',
+      opts: {
+        buttons: [],
+        image: {
+          src: 'assets/img/342889694_3530523573894436_7672415123078190943_n.jpg',
+          alt: 'Original Shakespeare Insult Kit'
+        },
+        maxWidth: 'calc(100vw - 2rem)',
+        width: 'min(1100px, calc(100vw - 2rem))'
+      }
+    }, false);
   };
 
   private load_query = (params: ParamMap | URLSearchParams) => {

@@ -13,131 +13,168 @@
     <div class="col-xl-10">
       <div class="card">
         <div class="card-body pt-3">
-          <h5 class="card-title fs-6">Change Logs</h5>
+          <h5 class="card-title fs-6">Synthetic Dataset Replay</h5>
+          <p id="change-history-seed-help" class="mb-3">
+            This page models non-production database population of synthetic change-history records. A fresh
+            refresh creates new mock data for demos, QA, or local development without relying on production data. Turn
+            on replay when a bug report, training walkthrough, or repeatable seed-data script needs the same generated
+            rows again. With the same template, options, and seed, mock-randomizer regenerates the same dataset instead
+            of drifting between runs. When date fields use relative values such as <code>now</code> or
+            <code>today-7D</code>, pair the seed with <code>withClock</code> so time-sensitive values replay too.
+          </p>
+          <div class="row g-3 align-items-end replay-controls">
+            <div class="col-sm-auto">
+              <div class="form-check form-switch replay-switch">
+                <input id="change-history-replay" class="form-check-input" type="checkbox"
+                  [ngModel]="replayEnabled" (ngModelChange)="replayModeChanged($event)">
+                <label class="form-check-label" for="change-history-replay">Replay seed</label>
+              </div>
+            </div>
+            @if (replayEnabled) {
+              <div class="col-lg-5">
+                <label class="form-label" for="change-history-seed">Seed value</label>
+                <input id="change-history-seed" class="form-control" type="text"
+                  aria-describedby="change-history-seed-help" [(ngModel)]="seed">
+              </div>
+              <div class="col-sm-auto">
+                <div class="form-check form-switch replay-switch">
+                  <input id="change-history-clock" class="form-check-input" type="checkbox"
+                    [ngModel]="clockEnabled" (ngModelChange)="clockModeChanged($event)">
+                  <label class="form-check-label" for="change-history-clock">Use fixed clock</label>
+                </div>
+              </div>
+              @if (clockEnabled) {
+                <div class="col-lg-4">
+                  <label class="form-label" for="change-history-clock-value">Clock value</label>
+                  <input id="change-history-clock-value" class="form-control" type="datetime-local"
+                    aria-describedby="change-history-seed-help" [(ngModel)]="clockValue">
+                </div>
+              }
+              <div class="col-sm-auto">
+                <button class="btn btn-outline-primary" type="button" (click)="generateSeed()">
+                  New Seed
+                </button>
+              </div>
+            }
+            <div class="col-sm-auto">
+              <button class="btn btn-primary" type="button" (click)="refreshContent()">
+                Reload Content
+              </button>
+            </div>
+          </div>
+          @if (replayStatus) {
+            <p class="replay-status mt-3 mb-0">
+              {{replayStatus}}
+            </p>
+          }
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body pt-3">
+          <h5 class="card-title fs-6">Change Logs @if (historyCount) { <span>({{historyCount}} records)</span> }</h5>
           @if (change_history$ | async; as history;) {
-            <div class="row">
-              <div class="col">
+            <div class="row g-3 align-items-start change-log-actions">
+              <div class="col-lg">
                 @if (pg.pages.length) {
                   <ul class="pagination">
                     <li class="page-item" [class.disabled]="pg.current === 0">
-                      <a class="page-link" (click)="pg.prev()">
+                      <button class="page-link" type="button" (click)="pg.prev()" [disabled]="pg.current === 0">
                         <i class="bi bi-chevron-left"></i>
-                      </a>
+                      </button>
                     </li>
                     @for (page of pg.pages; track page) {
                       <li class="page-item" [class.active]="page === pg.current">
-                        <a class="page-link" (click)="pg.goto(page)">
+                        <button class="page-link" type="button" (click)="pg.goto(page)">
                           {{page + 1}}
-                        </a>
+                        </button>
                       </li>
                     }
                     <li class="page-item" [class.disabled]="pg.pages.length - 1 <= pg.current">
-                      <a class="page-link" (click)="pg.next()">
+                      <button class="page-link" type="button" (click)="pg.next()" [disabled]="pg.pages.length - 1 <= pg.current">
                         <i class="bi bi-chevron-right"></i>
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 }
               </div>
-              <div class="col">
+              <div class="col-lg-auto">
                 <button class="btn btn-primary" type="button" [cdkCopyToClipboard]="history | json">
                   Copy to clipboard
                 </button>
               </div>
             </div>
-            <table class="table table-hover">
-              <thead>
-                <th scope="col">Id</th>
-                <th scope="col">TimeStamp</th>
-                <th scope="col">User</th>
-                <th scope="col">Data</th>
-              </thead>
-              <tbody>
-                @for (item of history; track item) {
-                  <tr>
-                    <th scope="row">{{item.Id}}</th>
-                    <td [matTooltip]="item.TimeStamp.toString()">
-                      {{item.TimeStamp | date:'short'}}
-                    </td>
-                    <td [matTooltip]="item.User.Email">
-                      {{item.User.Name}}
-                    </td>
-                    <td>
-                      @for (data of item.Data; track data) {
-                        <div class="pb-1">
-                          <button class="btn btn-primary sm_btn me-2" type="button"
-                            (click)="detailDialog.showModal()" [matTooltip]="data.Id">
-                            <i class="bi bi-binoculars"></i>
-                          </button>
+            <div class="table-responsive d-none d-md-block">
+              <table class="table table-hover">
+                <thead>
+                  <th scope="col">Id</th>
+                  <th scope="col">TimeStamp</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Data</th>
+                </thead>
+                <tbody>
+                  @for (item of history; track item) {
+                    <tr>
+                      <th scope="row">{{item.Id}}</th>
+                      <td [matTooltip]="item.TimeStamp.toString()">
+                        {{item.TimeStamp | date:'short'}}
+                      </td>
+                      <td [matTooltip]="item.User.Email">
+                        {{item.User.Name}}
+                      </td>
+                      <td>
+                        @for (data of item.Data; track data) {
+                          <div class="change-log-data-item pb-1">
+                            <button class="btn btn-primary sm_btn me-2" type="button"
+                              (click)="showDetailDialog(data)" [matTooltip]="data.Id">
+                              <i class="bi bi-binoculars"></i>
+                            </button>
+                            <i [class]="'bi ' + change_type_icon(data.ChangeType)"></i>
+                            {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
+                          </div>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="mobile-change-log-list d-md-none">
+              @for (item of history; track item) {
+                <article class="mobile-change-log-item">
+                  <div class="mobile-change-log-heading">
+                    <span class="mobile-change-log-label">Id</span>
+                    <span class="mobile-change-log-id">{{item.Id}}</span>
+                  </div>
+                  <dl class="mobile-change-log-meta">
+                    <div>
+                      <dt>Time</dt>
+                      <dd>{{item.TimeStamp | date:'short'}}</dd>
+                    </div>
+                    <div>
+                      <dt>User</dt>
+                      <dd>{{item.User.Name}}</dd>
+                    </div>
+                  </dl>
+                  <div class="mobile-change-log-data">
+                    @for (data of item.Data; track data) {
+                      <div class="mobile-change-log-data-item">
+                        <button class="btn btn-primary sm_btn" type="button"
+                          (click)="showDetailDialog(data)" [matTooltip]="data.Id">
+                          <i class="bi bi-binoculars"></i>
+                        </button>
+                        <span class="mobile-change-log-change">
                           <i [class]="'bi ' + change_type_icon(data.ChangeType)"></i>
                           {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
-                          <dialog #detailDialog class="change-detail-dialog">
-                            <ng-template [ngTemplateOutlet]="detail_modal"
-                              [ngTemplateOutletContext]="{data: data, dialog: detailDialog}" />
-                          </dialog>
-                        </div>
-                      }
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+                        </span>
+                      </div>
+                    }
+                  </div>
+                </article>
+              }
+            </div>
           }
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<ng-template #detail_modal let-data="data" let-dialog="dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title fs-6">
-        Change Log Details-&gt; {{data.ChangeType}}: {{data.TableName}}.{{data.FieldName}}
-      </h5>
-      <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      @if (data.CurrValue) {
-        <div class="col-md-10 mb-4">
-          <h5 class="modal-title mb-0 fs-6 fw-bold">
-            Current Value
-          </h5>
-          <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.CurrValue}" />
-        </div>
-      }
-      @if (data.PrevValue) {
-        <div class="col-md-10 mb-4">
-          <h5 class="modal-title mb-0 fs-6 fw-bold">
-            Previous Value
-          </h5>
-          <ng-template [ngTemplateOutlet]="detail_table" [ngTemplateOutletContext]="{value: data.PrevValue}" />
-        </div>
-      }
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="dialog.close()">
-        Close
-      </button>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #detail_table let-value="value">
-  <table class="detail-table">
-    <thead>
-      <th>Version</th>
-      <th>Created By</th>
-      <th>Created On</th>
-      <th>Modified By</th>
-      <th>Modified On</th>
-    </thead>
-    <tbody>
-      <td>{{value.version}}</td>
-      <td>{{value.CreatedBy}}</td>
-      <td>{{value.CreatedOn | date: 'short'}}</td>
-      <td>{{value.ModifiedBy}}</td>
-      <td>{{value.ModifiedOn | date: 'short'}}</td>
-    </tbody>
-  </table>
-</ng-template>

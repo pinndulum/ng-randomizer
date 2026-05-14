@@ -1,15 +1,130 @@
-.change-detail-dialog {
-  border: 0;
-  border-radius: 0.3rem;
-  max-width: 900px;
-  padding: 0;
-  width: min(900px, calc(100vw - 2rem));
+.change-log-actions .pagination {
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  max-width: 100%;
 }
 
-.change-detail-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+.change-log-data-item {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  min-width: max-content;
 }
 
-.detail-table {
-  width: 100%;
+.change-log-data-item .sm_btn {
+  flex: 0 0 auto;
+}
+
+.mobile-change-log-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mobile-change-log-item {
+  background: #ffffff;
+  border: 1px solid #ebeef4;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.375rem rgba(1, 41, 112, 0.08);
+  padding: 0.875rem;
+}
+
+.mobile-change-log-heading {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.mobile-change-log-label,
+.mobile-change-log-meta dt {
+  color: #6c757d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mobile-change-log-id {
+  color: #012970;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.mobile-change-log-meta {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0.875rem 0;
+}
+
+.mobile-change-log-meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.mobile-change-log-data {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.mobile-change-log-data-item {
+  align-items: flex-start;
+  background: #f6f9ff;
+  border-radius: 0.25rem;
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: 44px minmax(0, 1fr);
+  padding: 0.625rem;
+}
+
+.mobile-change-log-change {
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.replay-controls .form-control {
+  margin-bottom: 0;
+}
+
+.replay-switch {
+  padding-bottom: 0.5rem;
+}
+
+.replay-status {
+  background: #f6f9ff;
+  border-left: 4px solid #4154f1;
+  border-radius: 0.25rem;
+  color: #012970;
+  overflow-wrap: anywhere;
+  padding: 0.75rem 1rem;
+}
+
+@media (max-width: 767px) {
+  .change-log-history > .row,
+  .change-log-actions {
+    --bs-gutter-x: 0;
+  }
+
+  #change-history-seed-help {
+    overflow-wrap: anywhere;
+  }
+
+  .replay-controls {
+    --bs-gutter-x: 0;
+  }
+
+  .replay-controls > *,
+  .change-log-actions > * {
+    min-width: 0;
+  }
+
+  .replay-controls .btn,
+  .change-log-actions .btn {
+    width: 100%;
+  }
+
+  .change-log-actions .pagination {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
 }

@@ -9,6 +9,14 @@
   }
   <app-header />
   <app-sidebar />
+  @if (sidebarExpanded()) {
+    <button
+      type="button"
+      class="sidebar-backdrop"
+      aria-label="Close navigation"
+      (click)="closeSidebarOverlay()">
+    </button>
+  }
   <div id="main" class="main-container main">
     <router-outlet (activate)="componentActive($event)" />
   </div>

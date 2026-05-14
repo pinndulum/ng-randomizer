@@ -1,5 +1,18 @@
-<div class="card-group">
-  @for (item of items(); track item) {
-    <app-tz-clock [zone]="item" />
-  }
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item">Reference</li>
+            <li class="breadcrumb-item active">World Clock</li>
+        </ol>
+    </nav>
+    <h1>World Clock</h1>
 </div>
+
+<section class="section world-clock-page">
+    <div class="world-clock-grid">
+        @for (item of items(); track item.title) {
+            <app-tz-clock [zone]="item" />
+        }
+    </div>
+</section>

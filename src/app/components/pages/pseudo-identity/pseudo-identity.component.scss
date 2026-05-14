@@ -1,8 +1,216 @@
 .sm_btn {
-    width: 41.6px;
-    height: 37.6px;
+    height: 44px;
+    justify-content: center;
+    min-width: 44px;
+    padding: 0;
+    width: 44px;
 }
 
 .pseudo-bio {
     min-height: 100px;
+    resize: vertical;
+}
+
+.pseudo-identity .card-body,
+.pseudo-identity .tab-content,
+.pseudo-identity .tab-pane {
+    min-width: 0;
+}
+
+.pseudo-identity .form-control {
+    margin-bottom: 0;
+    min-width: 0;
+    text-overflow: ellipsis;
+}
+
+.pseudo-identity .nav-tabs {
+    flex-wrap: wrap;
+}
+
+.pseudo-identity .row.mb-0.pseudo-bio-row {
+    align-items: flex-start;
+}
+
+.identity-actions .btn {
+    width: 100%;
+}
+
+.identity-action-picker {
+    position: relative;
+    width: 100%;
+}
+
+.identity-action-picker.show {
+    z-index: 1000;
+}
+
+.identity-action-group {
+    display: flex;
+    width: 100%;
+}
+
+.identity-action-main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.identity-action-toggle {
+    flex: 0 0 44px;
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+    width: 44px;
+}
+
+.identity-action-menu {
+    background: var(--bs-primary);
+    border: 1px solid var(--bs-primary);
+    border-radius: 0.375rem;
+    box-shadow: none;
+    display: grid;
+    left: 0;
+    margin: 0;
+    max-width: 100%;
+    min-width: 100%;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.identity-action-option {
+    align-items: center;
+    background: var(--bs-primary);
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 0;
+    color: #ffffff;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    min-height: 44px;
+    text-align: left;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.identity-action-option:hover,
+.identity-action-option:focus {
+    background: #0b5ed7;
+    color: #ffffff;
+}
+
+.identity-action-option.active {
+    background: #0a58ca;
+    color: #ffffff;
+}
+
+.identity-action-option:last-child {
+    border-bottom: 0;
+}
+
+.identity-action-option:first-child {
+    font-weight: 700;
+}
+
+@media (max-width: 767px) {
+    .pseudo-identity > .row {
+        --bs-gutter-x: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .pseudo-identity > .row > [class*="col-"] {
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .pseudo-identity .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+    }
+
+    .pseudo-identity .nav-tabs .nav-link {
+        min-height: 44px;
+        white-space: nowrap;
+    }
+
+    .pseudo-identity .row.mb-0 {
+        --bs-gutter-x: 0;
+        align-items: end;
+        display: grid;
+        gap: 0.35rem 0.5rem;
+        grid-template-columns: minmax(0, 1fr) 44px;
+        margin-left: 0;
+        margin-right: 0;
+        padding-right: 0.75rem;
+    }
+
+    .pseudo-identity .row.mb-0 > * {
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .pseudo-identity .row.mb-0 > .col-form-label {
+        grid-column: 1 / -1;
+        max-width: 100%;
+        padding-bottom: 0.25rem;
+        width: 100%;
+    }
+
+    .pseudo-identity .row.mb-0 > .col-sm-10 {
+        grid-column: 1;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .pseudo-identity .row.mb-0 > .sm_btn {
+        grid-column: 2;
+    }
+
+    .pseudo-identity .secret-password-row {
+        grid-template-columns: minmax(0, 1fr) 44px 44px;
+    }
+
+    .pseudo-identity .secret-password-row > .sm_btn {
+        grid-column: auto;
+    }
+
+    .pseudo-identity .row.mb-0.pseudo-bio-row {
+        align-items: start;
+        grid-template-columns: minmax(0, 1fr) 44px;
+    }
+
+    .pseudo-identity .form-floating {
+        width: 100%;
+    }
+
+    .pseudo-identity .pseudo-bio-control {
+        display: contents;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .pseudo-identity .pseudo-bio-control .pseudo-bio {
+        grid-column: 1;
+    }
+
+    .identity-actions {
+        gap: 0.75rem;
+        margin-left: 0;
+        margin-right: 0;
+        padding-right: 0.75rem;
+    }
+
+    .identity-actions > .col {
+        flex: 0 0 100%;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+    }
 }

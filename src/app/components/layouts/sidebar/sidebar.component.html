@@ -1,12 +1,23 @@
-<aside id="sidebar" class="sidebar">
+<aside id="sidebar" class="sidebar" aria-label="Primary navigation">
     <ul class="sidebar-nav" id="sidebar-nav">
-        @for (item of navItems; track item.routerLink) {
-        <li class="nav-item">
-            <a class="nav-link" [routerLink]="item.routerLink">
-                <i [class]="item.iconClass"></i>
-                <span>{{item.label}}</span>
-            </a>
-        </li>
+        <li class="nav-heading">Randomizer Demos</li>
+        @for (item of randomizerNavItems; track item.routerLink) {
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="item.routerLink" (click)="closeMobileSidebar()">
+                    <i [class]="item.iconClass"></i>
+                    <span>{{item.label}}</span>
+                </a>
+            </li>
+        }
+        <li class="nav-separator" aria-hidden="true"></li>
+        <li class="nav-heading">Reference Demos</li>
+        @for (item of referenceNavItems; track item.routerLink) {
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="item.routerLink" (click)="closeMobileSidebar()">
+                    <i [class]="item.iconClass"></i>
+                    <span>{{item.label}}</span>
+                </a>
+            </li>
         }
     </ul>
 </aside>

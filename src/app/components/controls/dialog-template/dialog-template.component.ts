@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
-import { DialogModel } from '@assets/dialog.message';
+import { DialogModel } from '../../../../assets/dialog.message';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
 import { SafePipe } from '../../../pipes/safe.pipe';
@@ -8,6 +8,11 @@ import { SafePipe } from '../../../pipes/safe.pipe';
 export interface IFrameSource {
     src: string;
     title: string;
+}
+
+export interface ImageSource {
+    src: string;
+    alt: string;
 }
 
 export interface ButtonAction {
@@ -28,6 +33,7 @@ export class DialogTemplateComponent {
     protected title: string;
     protected message?: string;
     protected iframe?: IFrameSource;
+    protected image?: ImageSource;
     protected buttons: ButtonAction[] = [];
 
     constructor () {
@@ -36,11 +42,16 @@ export class DialogTemplateComponent {
         this.title = data.title;
         this.message = data.message;
         this.iframe = data.opts?.iframe;
-        this.buttons = data.opts?.buttons || [{ title: 'OK' }];
+        this.image = data.opts?.image;
+        this.buttons = data.opts?.buttons ?? [{ title: 'OK' }];
     }
 
     protected onPress (button: ButtonAction): void {
         const action = button?.action || button.title;
         this.dialogRef.close(action);
+    }
+
+    protected close (): void {
+        this.dialogRef.close();
     }
 }

@@ -22,7 +22,7 @@ export class Time {
                 this.milliseconds = +(match.groups['ms'] ?? '0');
             }
         } else {
-            time = time ?? { hours: 0, minutes: 0 };
+            time ??= { hours: 0, minutes: 0 };
             this.hours = time.hours;
             this.minutes = time.minutes;
             this.seconds = time.seconds ?? 0;
@@ -80,7 +80,7 @@ export class Time {
 
     toString = (format?: string) => {
         const padnum = (num: number, len: number): string => {
-            num = num ?? 0;
+            num ??= 0;
             return ('0'.repeat(len) + num).slice(-len);
         };
 

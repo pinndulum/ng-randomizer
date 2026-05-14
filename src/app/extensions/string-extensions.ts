@@ -34,7 +34,7 @@ Object.defineProperty(String.prototype, 'titleCase', {
         for (const word of minors) {
             str = str.replace(new RegExp(`\\s${word}\\s`, 'gi'), txt => txt.toLowerCase());
         }
-        acronyms = acronyms ?? [];
+        acronyms ??= [];
         for (const word of acronyms) {
             str = str.replace(new RegExp(`\\b${word}\\b`, 'gi'), word.toUpperCase());
         }

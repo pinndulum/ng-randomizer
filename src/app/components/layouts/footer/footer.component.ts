@@ -1,5 +1,5 @@
 import { Component, HostListener, signal } from '@angular/core';
-import dates from '@app/utils/dates';
+import dates from '../../../utils/dates';
 import { RouterLink } from '@angular/router';
 
 @Component({

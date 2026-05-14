@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { AlertService } from '../../../services/alert.service';
 
 import { ShakespeareInsultsComponent } from './shakespeare-insults.component';
 
@@ -10,7 +11,10 @@ describe('ShakespeareInsultsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     imports: [ShakespeareInsultsComponent],
-    providers: [provideRouter([])]
+    providers: [
+        provideRouter([]),
+        { provide: AlertService, useValue: { showDialog: () => Promise.resolve(undefined) } }
+    ]
 })
       .compileComponents();
 

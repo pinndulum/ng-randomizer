@@ -1,11 +1,186 @@
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 50%;
-    display: inherit;
-    text-align: center;
+.pi-page .card-body {
+    display: grid;
+    gap: 0.9rem;
+    min-width: 0;
+}
+
+.pi-intro {
+    color: #334155;
+    display: grid;
+    gap: 0.75rem;
+    line-height: 1.6;
+}
+
+.pi-intro p {
+    margin: 0;
+}
+
+.pi-formula {
+    background: #f8fafc;
+    border: 1px solid #dbe4f0;
+    border-radius: 0.375rem;
+    color: #012970;
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    padding: 0.75rem;
+    white-space: nowrap;
+}
+
+.pi-note {
+    color: #5f6f85;
+}
+
+.pi-calculation {
+    display: grid;
+    gap: 0;
+}
+
+.pi-control {
+    background: #f8fafc;
+    border: 1px solid #dbe4f0;
+    border-radius: 0.375rem;
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.pi-control-label,
+.pi-control-range,
+.pi-progress-meta {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pi-control-label {
+    color: #012970;
+    font-weight: 600;
+}
+
+.pi-control-label strong {
+    font-size: 1rem;
+}
+
+.pi-formula-field {
+    --mdc-outlined-text-field-container-shape: 0.375rem;
+    --mdc-outlined-text-field-focus-outline-color: #0d6efd;
+    --mdc-outlined-text-field-hover-outline-color: #86b7fe;
+    --mdc-outlined-text-field-label-text-color: #012970;
+    --mat-select-enabled-arrow-color: #012970;
+    display: block;
+    width: 100%;
+}
+
+.pi-formula-description {
+    color: #5f6f85;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    margin: 0 0 0.25rem;
+}
+
+.pi-control-range,
+.pi-progress-meta {
+    color: #6c757d;
+    font-size: 0.85rem;
+    line-height: 1.25;
+}
+
+.pi-progress {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.pi-progress-bar {
+    appearance: none;
+    background: #e9ecef;
+    border: 0;
+    height: 0.6rem;
+    overflow: hidden;
+    width: 100%;
+}
+
+.pi-progress-bar::-webkit-progress-bar {
+    background: #e9ecef;
+    border-radius: 999px;
+}
+
+.pi-progress-bar::-webkit-progress-value {
+    background: linear-gradient(90deg, #0d6efd, #20c997);
+    border-radius: 999px;
+    transition: width 120ms ease-out;
+}
+
+.pi-progress-bar::-moz-progress-bar {
+    background: linear-gradient(90deg, #0d6efd, #20c997);
+    border-radius: 999px;
+    transition: width 120ms ease-out;
 }
 
 .pi-wrap {
-    word-wrap: anywhere;
+    background:
+        linear-gradient(90deg, rgba(13, 110, 253, 0.08), rgba(32, 201, 151, 0.08)),
+        #ffffff;
+    border: 1px solid #dbe4f0;
+    border-radius: 0.375rem;
+    color: #1f2937;
+    font-family: Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: clamp(0.86rem, 1vw, 0.98rem);
+    line-height: 1.75;
+    max-height: min(52vh, 34rem);
+    overflow: auto;
+    padding: 0.75rem 1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.pi-loading-text {
+    animation: pi-loading-blink 1s steps(2, start) infinite;
+    color: #012970;
+    font-weight: 700;
+}
+
+@keyframes pi-loading-blink {
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pi-loading-text {
+        animation: none;
+    }
+}
+
+@media (max-width: 575px) {
+    .pi-page .card-body {
+        padding-left: 0.875rem;
+        padding-right: 0.875rem;
+    }
+
+    .pi-control {
+        padding: 0.75rem 0.875rem;
+    }
+
+    .pi-calculation {
+        gap: 0;
+    }
+
+    .pi-control-label,
+    .pi-progress-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .pi-formula {
+        font-size: 0.85rem;
+    }
+
+    .pi-wrap {
+        max-height: 48vh;
+        padding: 0.875rem;
+    }
 }

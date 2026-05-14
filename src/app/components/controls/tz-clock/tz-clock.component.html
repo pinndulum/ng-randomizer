@@ -1,13 +1,33 @@
 @if (zone().title) {
-  <div class="card">
-    <div class="card-body">
-      <h4 class="card-title">{{zone().title}}</h4>
-      <p class="card-text">
-        {{dt() | date : 'mediumDate' : tzOffset }}
-      </p>
-      <p class="card-text">
-        {{dt() | date: 'mediumTime' : tzOffset}}
-      </p>
-    </div>
-  </div>
+    <article class="clock-card" [class.clock-card-night]="isNight">
+        <div class="clock-card-header">
+            <div>
+                <p class="clock-location">{{zone().location}}</p>
+                <h2>{{zone().title}}</h2>
+            </div>
+            <span class="clock-badge">{{tz.name}}</span>
+        </div>
+
+        <div class="clock-time">
+            {{dt() | date: 'h:mm:ss a' : tzOffset}}
+        </div>
+        <div class="clock-date">
+            {{dt() | date : 'EEEE, MMM d, y' : tzOffset }}
+        </div>
+
+        <dl class="clock-meta">
+            <div>
+                <dt>Offset</dt>
+                <dd>{{tzOffsetLabel}}</dd>
+            </div>
+            <div>
+                <dt>Local</dt>
+                <dd>{{relativeToLocal}}</dd>
+            </div>
+            <div>
+                <dt>Phase</dt>
+                <dd>{{dayPart}}</dd>
+            </div>
+        </dl>
+    </article>
 }

@@ -1,0 +1,33 @@
+.sidebar {
+    max-width: calc(100vw - 1rem);
+}
+
+.sidebar-nav .nav-link {
+    align-items: flex-start;
+    min-height: 44px;
+}
+
+.sidebar-nav .nav-link i {
+    flex: 0 0 auto;
+    margin-top: 0.125rem;
+}
+
+.sidebar-nav .nav-link span {
+    overflow-wrap: anywhere;
+}
+
+.sidebar-nav .nav-heading {
+    color: #6c757d;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    line-height: 1.2;
+    margin: 0.75rem 0 0.25rem;
+    padding: 0 0.9375rem;
+    text-transform: uppercase;
+}
+
+.sidebar-nav .nav-separator {
+    border-top: 1px solid rgba(1, 41, 112, 0.16);
+    margin: 0.75rem 0.9375rem 0.5rem;
+}

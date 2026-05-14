@@ -2,9 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogState } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { lastValueFrom } from 'rxjs';
-import { DialogMessage, DialogModel } from '@assets/dialog.message';
+import { DialogMessage, DialogModel } from '../../assets/dialog.message';
 import { DialogTemplateComponent } from '../components/controls/dialog-template/dialog-template.component';
 import { AppConfig } from '../interfaces/app-config.interface';
+
+export { DialogModel, MatDialogState };
 
 export interface AlertMessage {
     type: 'log' | 'warn' | 'error' | 'no-log';
@@ -22,7 +24,7 @@ export class AlertService {
 
 
     success = (message: string, log?: boolean, ...props: unknown[]) => {
-        log = log ?? this.cfg.env !== 'production';
+        log ??= this.cfg.env !== 'production';
         const type = log ? 'log' : 'no-log';
         this.showSnack({ type, text: message, props });
     };
@@ -41,7 +43,6 @@ export class AlertService {
             msg.config ?? { duration: 5000 }
         );
         if (msg.type !== 'no-log') {
-
             console[msg.type](`alert: ${msg.text}`, ...(msg.props ?? []));
         }
     };
@@ -53,7 +54,12 @@ export class AlertService {
 
     showDialog = async (data: DialogModel, disableClose = true): Promise<string | undefined> => {
         const ref = this.dialog.open(DialogTemplateComponent, {
-            data, disableClose
+            data,
+            disableClose,
+            maxHeight: data.opts?.maxHeight ?? '70vh',
+            maxWidth: data.opts?.maxWidth,
+            panelClass: data.opts?.panelClass,
+            width: data.opts?.width
         });
         return await lastValueFrom<string | undefined>(ref.afterClosed());
     };
@@ -72,6 +78,7 @@ export class AlertService {
     };
 
 
-    private findDialog = (data: DialogModel) => this.dialog.openDialogs.find(x => x.componentInstance.data === data);
+    private findDialog = (data: DialogModel) =>
+        this.dialog.openDialogs.find(x => x.componentInstance.data === data);
     private findDialogMsg = (key: string) => this.findDialog(DialogMessage[key]);
 }

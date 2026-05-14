@@ -11,6 +11,62 @@
 </div>
 <section class="section obj-mock-dsl">
   <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body pt-3">
+          <h5 class="card-title fs-6">Mock DSL Replay</h5>
+          <p id="mock-dsl-seed-help" class="mb-3">
+            Use a seed to replay the same JSON DSL output while editing or demonstrating a template. Pair it with a
+            fixed clock when date fields use relative values such as <code>now</code> or <code>today-7D</code>.
+          </p>
+          <div class="row g-3 align-items-end replay-controls">
+            <div class="col-sm-auto">
+              <div class="form-check form-switch replay-switch">
+                <input id="mock-dsl-replay" class="form-check-input" type="checkbox"
+                  [ngModel]="replayEnabled" (ngModelChange)="replayModeChanged($event)">
+                <label class="form-check-label" for="mock-dsl-replay">Replay seed</label>
+              </div>
+            </div>
+            @if (replayEnabled) {
+              <div class="col-lg-5">
+                <label class="form-label" for="mock-dsl-seed">Seed value</label>
+                <input id="mock-dsl-seed" class="form-control" type="text"
+                  aria-describedby="mock-dsl-seed-help" [(ngModel)]="seed">
+              </div>
+              <div class="col-sm-auto">
+                <div class="form-check form-switch replay-switch">
+                  <input id="mock-dsl-clock" class="form-check-input" type="checkbox"
+                    [ngModel]="clockEnabled" (ngModelChange)="clockModeChanged($event)">
+                  <label class="form-check-label" for="mock-dsl-clock">Use fixed clock</label>
+                </div>
+              </div>
+              @if (clockEnabled) {
+                <div class="col-lg-4">
+                  <label class="form-label" for="mock-dsl-clock-value">Clock value</label>
+                  <input id="mock-dsl-clock-value" class="form-control" type="datetime-local"
+                    aria-describedby="mock-dsl-seed-help" [(ngModel)]="clockValue">
+                </div>
+              }
+              <div class="col-sm-auto">
+                <button class="btn btn-outline-primary" type="button" (click)="generateSeed()">
+                  New Seed
+                </button>
+              </div>
+            }
+            <div class="col-sm-auto">
+              <button class="btn btn-primary" type="button" (click)="reloadContent()" [disabled]="!!editobj.error">
+                Reload Content
+              </button>
+            </div>
+          </div>
+          @if (replayStatus) {
+            <p class="replay-status mt-3 mb-0">
+              {{replayStatus}}
+            </p>
+          }
+        </div>
+      </div>
+    </div>
     <div class="col-xl-6">
       <div class="card">
         <div class="card-body pt-3">
@@ -33,12 +89,7 @@
           <h5 class="card-title fs-6">
             Mock Result
           </h5>
-          <div class="row pb-3">
-            <div class="col">
-              <button class="btn btn-primary" type="button" (click)="mockdata()" [disabled]="!!editobj.error">
-                New Result
-              </button>
-            </div>
+          <div class="row g-2 pb-3 mock-result-actions">
             @if (editobj.mock) {
               <div class="col">
                 <button class="btn btn-primary" type="button" [cdkCopyToClipboard]="editobj.mock | json">
@@ -48,8 +99,8 @@
             }
           </div>
           @if (editobj.mock) {
-            <div class="row">
-              <textarea rows="30">{{editobj.mock | json}}</textarea>
+            <div class="mock-result-output">
+              <textarea class="form-control mock-result-textarea" rows="30" readonly>{{editobj.mock | json}}</textarea>
             </div>
           }
         </div>

@@ -34,7 +34,7 @@ export class SafePipe implements PipeTransform {
     }
 
     public transform (value: SafeValue, type: SafeTransform = 'url'): SafeResult {
-        type = type ?? 'url';
+        type ??= 'url';
         if (value instanceof File) {
             value = window.URL.createObjectURL(value);
             type = type === 'url' || type === 'resourceUrl' ? type : 'url';

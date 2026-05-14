@@ -199,7 +199,7 @@ export const asYYYYMMDD = (date: Date, sep?: string) => {
 };
 
 export const week = (date: Date, firstday?: number): number => {
-    firstday = firstday ?? 0;
+    firstday ??= 0;
     firstday = Math.floor(Math.min(Math.max(firstday, 0), 6));
     const utc = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const day = utc.getUTCDay() || 7;

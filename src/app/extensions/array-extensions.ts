@@ -42,21 +42,21 @@ Object.defineProperty(Array.prototype, 'equals', {
 
 Object.defineProperty(Array.prototype, 'exists', {
     value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): boolean {
-        predicate = predicate || defaultPredicate;
+        predicate ||= defaultPredicate;
         return !!this.first(predicate, thisArg);
     }
 });
 
 Object.defineProperty(Array.prototype, 'first', {
     value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T {
-        predicate = predicate || defaultPredicate;
+        predicate ||= defaultPredicate;
         return this.filter(predicate, thisArg)[0];
     }
 });
 
 Object.defineProperty(Array.prototype, 'last', {
     value: function <T>(this: Array<T>, predicate?: (value: T, index: number, array: T[]) => unknown, thisArg?: unknown): T {
-        predicate = predicate || defaultPredicate;
+        predicate ||= defaultPredicate;
         const filtered = this.filter(predicate, thisArg);
         return filtered[Math.max(1, filtered.length) - 1];
     }

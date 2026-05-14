@@ -1,15 +1,15 @@
 import { AsyncPipe, Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { MatDialogState } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { debounceTime, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FooterComponent } from './components/layouts/footer/footer.component';
 import { HeaderComponent } from './components/layouts/header/header.component';
+import { SidebarStateService } from './components/layouts/sidebar-state.service';
 import { SidebarComponent } from './components/layouts/sidebar/sidebar.component';
 import { AppConfig } from './interfaces/app-config.interface';
-import { AlertService } from './services/alert.service';
+import { AlertService, MatDialogState } from './services/alert.service';
 import { LoadingService } from './services/loading.service';
 import { PrefsService } from './services/prefs.service';
 
@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
   private readonly alert = inject(AlertService);
   private readonly loading = inject(LoadingService);
   private readonly route = inject(ActivatedRoute);
+  private readonly sidebarState = inject(SidebarStateService);
 
   protected readonly theme$: Observable<string> = this.prefs.theme$.pipe(
     map(theme => `rand-${theme}-theme`)
@@ -40,6 +41,7 @@ export class AppComponent implements OnInit {
   protected readonly loading$: Observable<boolean> = this.loading.loadingSub.pipe(
     debounceTime(300)
   );
+  protected readonly sidebarExpanded = this.sidebarState.expanded;
 
   ngOnInit(): void {
     this.loc.onUrlChange((url, state) => {
@@ -70,4 +72,6 @@ export class AppComponent implements OnInit {
       classes.add(layout);
     }
   };
+
+  protected readonly closeSidebarOverlay = (): void => this.sidebarState.closeOnMobileNavigation();
 }

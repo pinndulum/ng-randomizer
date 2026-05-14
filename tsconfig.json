@@ -3,10 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
-    "paths": {
-      "@app/*": ["./src/app/*"],
-      "@assets/*": ["./src/assets/*"]
-    },
+    "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "strict": true,
@@ -29,5 +26,10 @@
     "strictInputAccessModifiers": true,
     "strictStandalone": true,
     "strictTemplates": true
-  }
+  },
+  "exclude": [
+    "dist/**",
+    "node_modules/**",
+    "src/**/*.spec.ts"
+  ]
 }

@@ -1,0 +1,17 @@
+.demo-link-list {
+    line-height: 1.6;
+}
+
+.demo-link-list li + li {
+    margin-top: 0.5rem;
+}
+
+.usage-list {
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+}
+
+.usage-list li + li {
+    margin-top: 0.5rem;
+}

@@ -2,9 +2,10 @@ import { OnInit, Component, AfterViewInit, inject } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-import { MockService } from '@app/services/mock.service';
+import { MockService } from '../../../services/mock.service';
 import { AsyncPipe } from '@angular/common';
-import { ROUTE_LINKS } from '@app/routing/route-paths';
+import { ROUTE_LINKS } from '../../../routing/route-paths';
+import { AlertService } from '../../../services/alert.service';
 
 @Component({
     selector: 'app-buzz-words',
@@ -16,6 +17,7 @@ export class BuzzWordsComponent implements OnInit, AfterViewInit {
   private rtr = inject(Router);
   private rte = inject(ActivatedRoute);
   private mock = inject(MockService);
+  private alert = inject(AlertService);
 
 
   protected readonly word_lists = buzz_words;
@@ -67,6 +69,21 @@ export class BuzzWordsComponent implements OnInit, AfterViewInit {
       },
       queryParamsHandling: 'merge'
     });
+  };
+
+  protected readonly showSourceImageDialog = (): void => {
+    void this.alert.showDialog({
+      title: 'Original Buzzword Generator',
+      opts: {
+        buttons: [],
+        image: {
+          src: 'assets/img/c1d8b194-c0d8-4a81-b152-93a1b1fe6710.jfif',
+          alt: 'Original Buzzword Generator'
+        },
+        maxWidth: 'calc(100vw - 2rem)',
+        width: 'min(1100px, calc(100vw - 2rem))'
+      }
+    }, false);
   };
 
   private load_query = (params: ParamMap | URLSearchParams) => {

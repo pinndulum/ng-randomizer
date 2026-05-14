@@ -64,28 +64,9 @@
           <p>
             Combine one word from each of the three columns, prefaced with "Thou":
           </p>
-          <button type="button" class="btn btn-primary" (click)="sourceImageDialog.showModal()">
+          <button type="button" class="btn btn-primary" (click)="showSourceImageDialog()">
             Original Shakespeare Insult Kit
           </button>
-          <dialog #sourceImageDialog class="source-image-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title fs-6">Original Shakespeare Insult Kit</h5>
-                <button type="button" class="btn-close" (click)="sourceImageDialog.close()" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="col-md-4">
-                  <img src="assets/img/342889694_3530523573894436_7672415123078190943_n.jpg"
-                    alt="Original Shakespeare Insult Kit" class="source-image">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" (click)="sourceImageDialog.close()">
-                    Close
-                  </button>
-                </div>
-              </div>
-            </dialog>
         </div>
       </div>
     </div>

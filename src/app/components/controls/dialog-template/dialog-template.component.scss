@@ -1,0 +1,97 @@
+:host {
+    display: block;
+    max-width: min(92vw, 1100px);
+}
+
+.header {
+    padding: 1rem 1.25rem 0;
+    position: relative;
+}
+
+.header .mat-mdc-dialog-title {
+    font-size: clamp(1.125rem, 5vw, 1.5rem);
+    line-height: 1.25;
+    margin: 0;
+    overflow-wrap: anywhere;
+    padding: 0 3rem 0.75rem 0;
+}
+
+.header .mat-mdc-dialog-title::before {
+    display: none;
+}
+
+.dialog-close {
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0.25rem 0.75rem rgba(1, 41, 112, 0.2);
+    min-height: 44px;
+    min-width: 44px;
+    opacity: 1;
+    padding: 0.875rem;
+    position: absolute;
+    right: -0.5rem;
+    top: -0.5rem;
+    z-index: 1;
+}
+
+[mat-dialog-content] {
+    padding: 0 1.25rem 1rem;
+}
+
+[mat-dialog-actions] {
+    padding: 0 1.25rem 1rem;
+}
+
+.dialog-message {
+    margin-bottom: 0;
+}
+
+.dialog-image-content {
+    overflow: auto;
+}
+
+.dialog-image {
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-height: calc(100vh - 13rem);
+    max-width: 100%;
+}
+
+:host ::ng-deep .dialog-detail-section {
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+:host ::ng-deep .dialog-detail-section:last-child {
+    margin-bottom: 0;
+}
+
+:host ::ng-deep .dialog-detail-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+:host ::ng-deep .dialog-detail-table {
+    min-width: 620px;
+    width: 100%;
+}
+
+:host ::ng-deep .dialog-detail-table th,
+:host ::ng-deep .dialog-detail-table td {
+    border-bottom: 1px solid #ebeef4;
+    padding: 0.5rem;
+    vertical-align: top;
+}
+
+:host ::ng-deep .dialog-detail-table th {
+    color: #012970;
+    font-weight: 700;
+}
+
+iframe {
+    border: 0;
+    height: min(70vh, 640px);
+    width: min(82vw, 900px);
+}

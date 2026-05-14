@@ -1,37 +1,71 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DialogModel } from '@assets/dialog.message';
-import { SafePipe } from '@app/pipes/safe.pipe';
+import { DialogModel } from '../../../../assets/dialog.message';
 
 import { DialogTemplateComponent } from './dialog-template.component';
 
-const dialogData: DialogModel = {
-  title: 'Test dialog',
-  message: 'Dialog body'
-};
-
 describe('DialogTemplateComponent', () => {
-  let component: DialogTemplateComponent;
-  let fixture: ComponentFixture<DialogTemplateComponent>;
+    let component: DialogTemplateComponent;
+    let dialogData: DialogModel;
+    let dialogRef: jasmine.SpyObj<MatDialogRef<DialogTemplateComponent, string>>;
+    let fixture: ComponentFixture<DialogTemplateComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-    imports: [DialogTemplateComponent, SafePipe],
-    providers: [
-        { provide: MAT_DIALOG_DATA, useValue: dialogData },
-        { provide: MatDialogRef, useValue: { close: () => undefined } }
-    ]
-})
-      .compileComponents();
-  });
+    beforeEach(async () => {
+        dialogData = {
+            title: 'Test dialog',
+            message: 'Dialog body'
+        };
+        dialogRef = jasmine.createSpyObj<MatDialogRef<DialogTemplateComponent, string>>('MatDialogRef', ['close']);
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DialogTemplateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        await TestBed.configureTestingModule({
+            imports: [DialogTemplateComponent],
+            providers: [
+                { provide: MAT_DIALOG_DATA, useFactory: () => dialogData },
+                { provide: MatDialogRef, useFactory: () => dialogRef }
+            ]
+        })
+            .compileComponents();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    const createComponent = (data = dialogData): HTMLElement => {
+        dialogData = data;
+        fixture = TestBed.createComponent(DialogTemplateComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+        return fixture.nativeElement as HTMLElement;
+    };
+
+    it('should create', () => {
+        createComponent();
+
+        expect(component).toBeTruthy();
+    });
+
+    it('renders image dialogs without action buttons when buttons are empty', () => {
+        const nativeElement = createComponent({
+            title: 'Image dialog',
+            opts: {
+                buttons: [],
+                image: {
+                    src: 'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
+                    alt: 'Example source'
+                }
+            }
+        });
+        const image = nativeElement.querySelector<HTMLImageElement>('.dialog-image');
+
+        expect(image?.getAttribute('src')).toBe('data:image/gif;base64,R0lGODlhAQABAAAAACw=');
+        expect(image?.getAttribute('alt')).toBe('Example source');
+        expect(nativeElement.querySelector('.mat-mdc-dialog-actions')).toBeNull();
+        expect(nativeElement.querySelectorAll('button').length).toBe(1);
+    });
+
+    it('closes from the floating close button', () => {
+        const nativeElement = createComponent();
+        const closeButton = nativeElement.querySelector<HTMLButtonElement>('.dialog-close');
+
+        closeButton?.click();
+
+        expect(dialogRef.close).toHaveBeenCalled();
+    });
 });

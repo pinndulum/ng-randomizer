@@ -1,0 +1,12 @@
+.world-clock-grid {
+    align-items: stretch;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+@media (max-width: 575px) {
+    .world-clock-grid {
+        gap: 0.875rem;
+    }
+}

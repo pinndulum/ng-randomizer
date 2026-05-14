@@ -1,9 +1,14 @@
-import { ndx_sig_of } from '@app/interfaces/index-signature-of-t.interface';
+import { ndx_sig_of } from '../app/interfaces/index-signature-of-t.interface';
 
 export class DialogModel {
     public readonly opts?: {
         iframe?: { src: string; title: string };
+        image?: { src: string; alt: string };
         buttons?: { title: string; action?: string }[];
+        panelClass?: string | string[];
+        width?: string;
+        maxHeight?: string;
+        maxWidth?: string;
     } = {};
     constructor (public title: string, public message?: string) {
     }

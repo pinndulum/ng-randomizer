@@ -1,20 +1,98 @@
-<p>
-  In honor of Pi or &pi; day, here is our favorite mathematical real transcendental (and thus irrational) constant
-  that describes the ratio of a circle's circumference to its diameter. And because it wouldn't be much fun to truncate
-  this infinitely long number to a simple 10 or 20 digits, I have provided a {{superlative()}} {{precision | number:'1.0':'en-US'}}-point precision suitable
-  for your next meticulously high accuracy circular project. If you'd like to calculate digits of Pi for yourself, it's
-  very easy. Simply solve for:<br/>
-  <code class="center">
-    2 * &#40;1 + 1/3 * &#40;1 + 2/5 * &#40;1 + 3/7 * &#40;1 + 4/9 * &#40;1 + 5/11 * &#40;&mldr;
-  </code>
-  <span class="center">in perpetuity, or whenever you give up!</span>
-</p>
-<p>
-  Oh, and by the way, I like my pie cut round!
-</p>
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item">Reference</li>
+            <li class="breadcrumb-item active">Pi Digits</li>
+        </ol>
+    </nav>
+    <h1>Pi Digits</h1>
+</div>
 
-@if (progress | async; as prg;) {
-  <div class="pi-wrap">
-    {{ prg.content.str }}
-  </div>
-}
+<section class="section pi-page">
+    <div class="card">
+        <div class="card-body">
+            <div class="pi-intro">
+                <p>
+                    In honor of Pi or &pi; day, here is our favorite mathematical real transcendental
+                    constant that describes the ratio of a circle's circumference to its diameter. And
+                    because it would not be much fun to stop at 10 or 20 digits, this page renders a
+                    {{superlative()}} {{precision | number:'1.0':'en-US'}} points of precision.
+                </p>
+                <p>
+                    Simply solve for: <b>{{selectedFormulaLabel()}}</b>
+                </p>
+                <code class="pi-formula">
+                    {{selectedFormulaExpression()}}
+                </code>
+                <p class="pi-note">
+                    {{selectedFormulaPostExpressionText()}}
+                </p>
+                <p class="pi-note">
+                    Oh, and by the way, I like my pie cut round.
+                </p>
+            </div>
+
+            <div class="pi-calculation">
+                <div class="pi-control">
+                    <mat-form-field class="pi-formula-field" appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Formula</mat-label>
+                        <mat-select
+                            id="pi_formula"
+                            [value]="selectedFormula"
+                            panelClass="pi-formula-panel"
+                            (selectionChange)="updateFormula($event.value)">
+                            @for (option of formulaOptions; track option.value) {
+                                <mat-option [value]="option.value">{{option.label}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <p class="pi-formula-description">
+                        {{selectedFormulaDescription()}}
+                    </p>
+
+                    <label for="pi_precision" class="pi-control-label">
+                        <span>Precision</span>
+                        <strong>{{precision | number:'1.0':'en-US'}} points</strong>
+                    </label>
+                    <input
+                        id="pi_precision"
+                        class="form-range"
+                        type="range"
+                        [min]="minPrecision"
+                        [max]="maxPrecision"
+                        step="1"
+                        [value]="precision"
+                        [attr.aria-valuetext]="(precision | number:'1.0':'en-US') + ' points precision'"
+                        (input)="updatePrecision($any($event.target).value)"
+                        (mouseup)="commitPrecision($any($event.target).value)"
+                        (touchend)="commitPrecision($any($event.target).value)"
+                        (change)="commitPrecision($any($event.target).value)">
+                    <div class="pi-control-range" aria-hidden="true">
+                        <span>{{minPrecision | number:'1.0':'en-US'}} digits</span>
+                        <span>{{maxPrecision | number:'1.0':'en-US'}} digits</span>
+                    </div>
+                </div>
+
+                @let prg = progress | async;
+                <div class="pi-progress" aria-live="polite">
+                    @if (calculationPending || !prg) {
+                        <div class="pi-progress-meta">
+                            <span>Preparing {{precision | number:'1.0':'en-US'}} digits</span>
+                            <span>Loading</span>
+                        </div>
+                        <progress class="pi-progress-bar" max="100"></progress>
+                        <div class="pi-wrap"><span class="pi-loading-text">Loading...</span></div>
+                    } @else {
+                        <div class="pi-progress-meta">
+                            <span>{{prg.content.len | number:'1.0':'en-US'}} of {{precision | number:'1.0':'en-US'}} digits</span>
+                            <span>{{progressPercent(prg)}}%</span>
+                        </div>
+                        <progress class="pi-progress-bar" [value]="progressPercent(prg)" max="100"></progress>
+                        <div class="pi-wrap">{{prg.content.str}}</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

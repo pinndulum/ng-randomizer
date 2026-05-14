@@ -1,9 +1,16 @@
 :host {
-  display: block;
+    display: block;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .json-editor-host,
 :host ::ng-deep .jsoneditor,
 :host ::ng-deep textarea.jsoneditor-text {
-  min-height: var(--json-editor-min-height, 500px);
+    min-height: var(--json-editor-min-height, 500px);
+}
+
+.json-editor-host {
+    max-width: 100%;
+    overflow-x: auto;
 }

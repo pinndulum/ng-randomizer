@@ -30,7 +30,7 @@ module.exports = tseslint.config(
         ...globals.es2022
       },
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: __dirname
       },
       sourceType: 'module'
@@ -71,9 +71,19 @@ module.exports = tseslint.config(
       ],
       'eqeqeq': ['error', 'always', { null: 'ignore' }],
       'linebreak-style': ['error', 'windows'],
+      'logical-assignment-operators': ['error', 'always'],
       'no-case-declarations': 'error',
       'no-extra-boolean-cast': 'error',
       'no-prototype-builtins': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [{
+            group: ['@app/*', '@assets/*', 'src/*'],
+            message: 'Use relative imports for local project files.'
+          }]
+        }
+      ],
       'no-useless-assignment': 'error',
       'no-useless-constructor': 'error',
       'object-shorthand': ['error', 'always'],

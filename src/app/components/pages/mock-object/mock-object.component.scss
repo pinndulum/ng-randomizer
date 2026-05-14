@@ -1,0 +1,76 @@
+.obj-mock-dsl {
+    --json-editor-min-height: 500px;
+}
+
+.mock-result-actions .btn {
+    width: 100%;
+}
+
+.replay-controls .form-control {
+    margin-bottom: 0;
+}
+
+.replay-switch {
+    padding-bottom: 0.5rem;
+}
+
+.replay-status {
+    background: #f6f9ff;
+    border-left: 4px solid #4154f1;
+    border-radius: 0.25rem;
+    color: #012970;
+    overflow-wrap: anywhere;
+    padding: 0.75rem 1rem;
+}
+
+.obj-mock-dsl .card-body,
+.mock-result-output {
+    min-width: 0;
+}
+
+.mock-result-output {
+    max-width: 100%;
+}
+
+.mock-result-textarea {
+    font-family: Consolas, "Courier New", monospace;
+    margin-bottom: 0;
+    max-width: 100%;
+    min-height: 30rem;
+    overflow: auto;
+    resize: vertical;
+    white-space: pre;
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    .obj-mock-dsl {
+        --json-editor-min-height: 360px;
+    }
+
+    .mock-result-actions {
+        gap: 0.75rem;
+    }
+
+    .replay-controls {
+        --bs-gutter-x: 0;
+    }
+
+    .replay-controls > * {
+        min-width: 0;
+    }
+
+    .replay-controls .btn {
+        width: 100%;
+    }
+
+    .mock-result-actions > .col {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    .mock-result-textarea {
+        font-size: 0.875rem;
+        min-height: 22rem;
+    }
+}

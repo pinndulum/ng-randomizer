@@ -1,0 +1,33 @@
+.app-logo {
+    min-width: 0;
+}
+
+.header .toggle-sidebar-btn {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    display: inline-flex;
+    justify-content: center;
+    line-height: 1;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 0 0 0.625rem;
+}
+
+.logo .app-logo-title {
+    display: inline-block;
+    max-width: calc(100vw - 5rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 575px) {
+    .header {
+        padding-left: 0.5rem;
+    }
+
+    .header .toggle-sidebar-btn {
+        padding-left: 0.25rem;
+    }
+}

@@ -1,0 +1,17 @@
+/* Type-aware ESLint project. Angular build and test use tsconfig.app/spec. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "dist/**",
+    "node_modules/**"
+  ]
+}

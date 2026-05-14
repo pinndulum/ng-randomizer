@@ -2,57 +2,113 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item active">Demo Guide</li>
         </ol>
     </nav>
-    <h1>Home</h1>
+    <h1>Mock Randomizer Demo</h1>
 </div>
 <section class="section home">
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-body">
-                    <div class="card-header pb-0 mb-2">
-                        <h3 class="mb-0">Randomizer UI</h3>
-                        <h5 class="mb-0">The @joxnathan/mock-randomizer library demo</h5>
+                <div class="card-body pt-3">
+                    <div class="card-header pb-0 mb-3">
+                        <h3 class="mb-0">Documenting @joxnathan/mock-randomizer</h3>
+                        <h5 class="mb-0">Synthetic data examples for UI demos, tests, and repeatable fixtures</h5>
                     </div>
                     <p>
-                        This Randomizer UI is a demonstration of implementing the <a href="https://www.npmjs.com/package/@joxnathan/mock-randomizer" target="_blank">@joxnathan/mock-randomizer</a>
-                        library available on npmjs.com. when loaded as a dev dependency @joxnathan/mock-randomizer can replace data sources
-                        in node project unit tests. The scenarios and utilizations implemented here are only for demonstration and are meant
-                        to be a references and examples of the kinds of random data that can be generated and how to implement their use.
+                        This Randomizer UI demonstrates the
+                        <a href="https://www.npmjs.com/package/@joxnathan/mock-randomizer" target="_blank" rel="noopener">@joxnathan/mock-randomizer</a>
+                        package. Loaded as a dev dependency, mock-randomizer can replace service calls, model providers,
+                        and static fixtures in Node project tests. The examples here are meant to be references for
+                        the kinds of synthetic data that can be generated and how that data can be shaped for real use.
                     </p>
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">Random data demos</h4>
+                            <ul class="list-unstyled demo-link-list">
+                                <li><a [routerLink]="links.buzzWords">Buzzwords</a> shows deterministic query params and custom word banks.</li>
+                                <li><a [routerLink]="links.shakespeareInsults">Shakespeare Insults</a> combines reusable word lists with browser speech synthesis.</li>
+                                <li><a [routerLink]="links.flipACoin">Flip A Coin</a> visualizes random choices and aggregate outcomes.</li>
+                                <li><a [routerLink]="links.pseudoIdentity">Pseudo Identity</a> assembles realistic names, addresses, phones, emails, and credit-card-shaped values.</li>
+                                <li><a [routerLink]="links.changeLogHistory">Change Log History</a> generates nested arrays and replayable seeded data.</li>
+                                <li><a [routerLink]="links.mockDsl">Mock DSL Fill</a> lets you experiment with the package JSON DSL.</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">Not so random</h4>
+                            <ul class="list-unstyled demo-link-list">
+                                <li><a [routerLink]="links.pi">Pi Digits</a> is a deterministic reference page for a familiar non-random sequence.</li>
+                                <li><a [routerLink]="links.worldClock">World Clock</a> displays time-zone behavior without pretending the clock itself is random.</li>
+                            </ul>
+                            <h4 class="fs-5 mt-4">What to notice</h4>
+                            <p>
+                                Seeded generation matters when a failing test or demo needs to be replayed exactly.
+                                The Change Log History page is the clearest example: the same seed, template, and
+                                options regenerate the same dataset instead of merely producing similar-looking data.
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">What mock-randomizer generates</h4>
+                            <p>
+                                Random numbers, dates, booleans, strings, and other primitive values can be returned
+                                directly. Those values can then be placed inside objects and arrays. Arrays can be
+                                instantiated with a random number of elements between lower and upper limits, and each
+                                item in that array can be generated from the same template.
+                            </p>
+                            <p>
+                                The package also provides realistic data rather than simply random characters. A name
+                                does not have to look like "iEwEVhrKyBYc"; it can look like "Rachel" or "Joseph".
+                                Embedded word banks provide names for people, places, things, titles, companies, and
+                                type-set copy. You can also provide your own word bank, enum, or list of choices.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">How to explore it</h4>
+                            <ul class="usage-list">
+                                <li>Use the refresh buttons to compare fresh random output against replayed seeded output.</li>
+                                <li>Copy generated JSON from Change Log History and inspect the nested object shape.</li>
+                                <li>Change the seed value, refresh once, then refresh again with the same seed to see replay behavior.</li>
+                                <li>Use the Buzzwords and Shakespeare pages to see how URL query params can preserve a generated choice.</li>
+                                <li>Open Mock DSL Fill when you want to experiment with JSON DSL templates directly.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">Realistic and valid-looking data</h4>
+                            <p>
+                                The Pseudo Identity page shows a single generated object with properties such as name,
+                                address, phone number, credit-card-shaped values, email, and short biography copy.
+                                Realistic data should be understandable to a human reader, but it should also be able
+                                to pass common validation checks. U.S. phone numbers, zip codes, and time zones can be
+                                influenced by state, and generated card numbers can pass Luhn checksum validation.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4 class="fs-5">Generated collections and replay</h4>
+                            <p>
+                                The Change Log History page demonstrates filling a collection of objects. Each record
+                                contains its own generated array, and each nested change can receive previous and
+                                current value objects based on the generated change type. Seed replay makes this useful
+                                for tests: the same seed, template, and options regenerate the same dataset instead of
+                                producing a merely similar dataset.
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
                     <p>
-                        Random numbers, dates, booleans, strings of text, etc. can be returned. These in turn can be placed within objects and arrays.
-                        Arrays can be randomly instantiated with a certain number of elements between lower and upper limits. Then in turn, the items
-                        in the array can be randomly generated. Objects can also be filled with randomly generated properties.
+                        The result of flipping a coin is deterministic if you know the side the coin started on and how
+                        many times it spun before coming to rest. In the Flip A Coin page, those considerations are
+                        randomized with a brief pause for anticipation. Results are added to a table and should trend
+                        toward a nearly 50/50 outcome after enough flips.
                     </p>
-                    <p>
-                        The result of flipping a coin is deterministic if you can know the side the coin started on and how many times it spins
-                        before coming to rest. In the "Flip A Coin" page both these considerations are randomized with brief pauses to allow
-                        for anticipation of the user. The results are then added to a table and should show a nearly 50/50 outcome after sufficiently
-                        large number of flips have occurred.
-                    </p>
-                    <p>
-                        Another aspect to the mock-randomizer is providing realistic data rather than simply random values. A name could not only
-                        represented by a random count of random characters, i.e. "iEwEVhrKyBYc". How about something more realistic like
-                        "Rachel" or "Joseph". Embedded wordbanks are used to pick names for people, places, things, titles, etc. There is even a
-                        "typeset" option that returns one of several "lorem ipsum" strings of various lengths. Or use your own wordbank, enum, or
-                        list to choose from. Look to the "Buzzwords" page to see an example.
-                    </p>
-                    <p>
-                        Provisions have been made for formatting random numericals into other realistic looking values. For instance, the "Pseudo
-                        Identity" page shows the creation of a single object with various properties such as name, address, phone number, credit card,
-                        etc. Realistic results should not only be words that can be understood by a human reader, but should be able to pass other
-                        potential checks, verifications, validations, and scrutiny as well. When creating a U.S. phone number, zip code, and time zone;
-                        an optional "State" parameter indicates where the realistic data should appear to come from. Credit card numbers can be created
-                        that pass LUHN digit checksum validation.
-                    </p>
-                    <p>
-                        The "Change Log History" page shows the use of randomly filling a number of objects in an array. Notice how the number of pages
-                        changes each time the page is reloaded. Each object contains an array that is also randomly filled. This example shows how to to
-                        use the mock-randomizer DSL (domain specific language) to fill each object within the array. Empty "Prev" and "Curr" objects are
-                        created during array initialization. Properties for these objects are then filled in later based on values returned earlier.
+                    <p class="mb-0">
+                        For project setup, publishing, and upgrade notes, see the repository README and changelog.
                     </p>
                 </div>
             </div>

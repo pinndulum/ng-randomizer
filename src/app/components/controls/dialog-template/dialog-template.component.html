@@ -1,9 +1,15 @@
 <div class="header">
   <h1 mat-dialog-title>{{ title }}</h1>
+  <button type="button" class="btn-close dialog-close" (click)="close()" aria-label="Close"></button>
 </div>
 @if (message) {
   <div mat-dialog-content>
-    <p class="dialog-message" [innerHtml]="message | safe: 'html'"></p>
+    <div class="dialog-message" [innerHtml]="message | safe: 'html'"></div>
+  </div>
+}
+@if (image) {
+  <div mat-dialog-content class="dialog-image-content">
+    <img class="dialog-image" [src]="image.src" [alt]="image.alt">
   </div>
 }
 @if (iframe) {
@@ -11,8 +17,10 @@
     <iframe [src]="iframe.src" [title]="iframe.title"></iframe>
   </div>
 }
-<div mat-dialog-actions>
-  @for (button of buttons; track button) {
-    <button mat-button type="button" (click)="onPress(button)">{{button.title}}</button>
-  }
-</div>
+@if (buttons.length) {
+  <div mat-dialog-actions>
+    @for (button of buttons; track button) {
+      <button mat-button type="button" (click)="onPress(button)">{{button.title}}</button>
+    }
+  </div>
+}

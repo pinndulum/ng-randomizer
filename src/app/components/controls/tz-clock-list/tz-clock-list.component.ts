@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { tzGMT, TZItem, TzClockComponent } from '../tz-clock/tz-clock.component';
 
 const DEFAULT_TIME_ZONES: TZItem[] = [{
@@ -51,7 +52,7 @@ const DEFAULT_TIME_ZONES: TZItem[] = [{
     selector: 'app-tz-clock-list',
     templateUrl: './tz-clock-list.component.html',
     styleUrls: ['./tz-clock-list.component.scss'],
-    imports: [TzClockComponent]
+    imports: [RouterLink, TzClockComponent]
 })
 export class TzClockListComponent {
   public readonly items = input<TZItem[]>(DEFAULT_TIME_ZONES);
