@@ -8,8 +8,6 @@ import { AsyncPipe } from '@angular/common';
 import { ROUTE_LINKS } from '../../../routing/route-paths';
 import { AlertService } from '../../../services/alert.service';
 
-const utter = SpeechSynthesisUtterance;
-
 @Component({
     selector: 'app-shakespeare-insults',
     templateUrl: './shakespeare-insults.component.html',
@@ -25,12 +23,16 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
 
   protected readonly word_lists = insults;
   protected readonly synth?: SpeechSynthesis;
+  protected readonly canSpeak: boolean;
   protected readonly insults$: Observable<string>;
 
+  private readonly Utterance?: typeof SpeechSynthesisUtterance;
   private readonly word_sub: Subject<string> = new Subject();
 
   constructor() {
-    this.synth = speechSynthesis;
+    this.synth = globalThis.speechSynthesis;
+    this.Utterance = globalThis.SpeechSynthesisUtterance;
+    this.canSpeak = !!this.synth && !!this.Utterance;
     this.insults$ = this.word_sub.pipe(
       delay(0)
     );
@@ -78,7 +80,8 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
 
   protected readonly sayit = async (text?: string, voice?: number) => {
     const synth = this.synth;
-    if (!synth || !text) {
+    const Utterance = this.Utterance;
+    if (!synth || !Utterance || !text) {
       return;
     }
 
@@ -90,13 +93,13 @@ export class ShakespeareInsultsComponent implements OnInit, AfterViewInit {
       voices = synth.getVoices();
     }
 
-    const vndx = [voice, 2, 0].first(x => !!voices[Number(x)]);
-    if(!vndx) {
+    const vndx = [voice, 2, 0].find(x => x !== undefined && !!voices[Number(x)]);
+    if (vndx === undefined) {
       return;
     }
 
-    const speech = new utter(text);
-    speech.voice = voices[vndx];
+    const speech = new Utterance(text);
+    speech.voice = voices[Number(vndx)];
     if (synth.speaking) {
       synth.cancel();
     }

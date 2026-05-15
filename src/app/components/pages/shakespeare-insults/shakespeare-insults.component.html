@@ -15,7 +15,7 @@
         <div class="card-body pt-3">
           @if (insults$ | async; as insults;) {
             <h1>Thou {{insults}}</h1>
-            @if (synth) {
+            @if (canSpeak) {
               <button class="btn btn-primary sm_btn" type="button" (click)="sayit('Thou ' + insults, 6)"
                 [matTooltip]="'Say it'">
                 <i class="bi bi-volume-up"></i>
