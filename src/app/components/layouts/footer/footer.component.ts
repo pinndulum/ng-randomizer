@@ -1,6 +1,7 @@
 import { Component, HostListener, signal } from '@angular/core';
 import dates from '../../../utils/dates';
 import { RouterLink } from '@angular/router';
+import { appVersions } from '../../../app-versions';
 
 @Component({
     selector: 'app-footer',
@@ -10,6 +11,8 @@ import { RouterLink } from '@angular/router';
 })
 export class FooterComponent {
     protected readonly year = dates.current.year();
+    protected readonly appVersion = appVersions.app;
+    protected readonly mockRandomizerVersion = appVersions.mockRandomizer;
     protected readonly showBackToTop = signal(false);
 
     @HostListener('window:scroll')
