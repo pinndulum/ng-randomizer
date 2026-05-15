@@ -10,8 +10,8 @@
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
     "lint:fix": "eslint . --fix",
-    "preghpages": "ng build --base-href /ng-randomizer/",
-    "ghpages": "npx angular-cli-ghpages --dir=dist/ng-randomizer/browser"
+    "build:ghpages": "ng build --base-href /ng-randomizer/",
+    "ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/ng-randomizer/browser --remote=gh"
   },
   "private": true,
   "dependencies": {
